@@ -26,3 +26,29 @@ void showMenu() {
     std::endl << "4. Quit" <<
     std::endl;
 }
+
+void showCredits() {
+    std::cout << "----------------------------------" << std::endl;
+
+    std::cout << "Name: Braden Smith" << std::endl;
+    std::cout << "Student ID: s3787174" << std::endl;
+    std::cout << "Email: s3787174@student.rmit.edu.au" << "\n"<< std::endl;
+
+    std::cout << "Name: Victoria Elliot" << std::endl;
+    std::cout << "Student ID: s3710716" << std::endl;
+    std::cout << "Email: s3710716@student.rmit.edu.au" << "\n"<< std::endl;
+
+    std::cout << "Name: Michael Jurie" << std::endl;
+    std::cout << "Student ID: s3785631" << std::endl;
+    std::cout << "Email: s3785631@student.rmit.edu.au" << std::endl;
+
+    std::cout << "----------------------------------" << std::endl;
+    showMenu();
+}
+
+int getInput() {
+    std::cout << "> ";
+    int a;
+    std::cin >> a;
+    return a;
+}
