@@ -1,14 +1,16 @@
 #include <iostream>
 
 void exit();
+void showCredits();
 void showMenu();
+int getInput();
 
 int main(int argc, char** argv) {
     std::cout << "Welcome to Azul!" << 
     std::endl << "---------------------" << 
     std::endl;
     showMenu();
-
+    
     return EXIT_SUCCESS;
 }
 
@@ -25,6 +27,21 @@ void showMenu() {
     std::endl << "3. Credits" <<
     std::endl << "4. Quit" <<
     std::endl;
+
+    int input = getInput();
+    if (input == 1) {
+        // TODO New Game
+    } else if (input == 2) {
+        // TODO Load Game
+    } else if (input == 3) {
+        showCredits();
+    } else if (input == 4) {
+        exit();
+    } else {
+        std::cout << "Please enter a a valid number" << std::endl;
+        showMenu();
+    }
+    std::cout << std::endl << std::endl;
 }
 
 void showCredits() {
