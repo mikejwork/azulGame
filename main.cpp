@@ -2,12 +2,14 @@
 
 void exit();
 void showMenu();
+int getInput();
 
 int main(int argc, char** argv) {
     std::cout << "Welcome to Azul!" << 
     std::endl << "---------------------" << 
     std::endl;
     showMenu();
+    getInput();
 
     return EXIT_SUCCESS;
 }
@@ -47,8 +49,17 @@ void showCredits() {
 }
 
 int getInput() {
+    int a = -1;
+    while(a != 0){
     std::cout << "> ";
-    int a;
+    
     std::cin >> a;
+    
+    if(a == 1 || a == 2 || a ==3 || a == 4){
+        return a;
+    } else {
+        showMenu();
+    }
+    }
     return a;
 }
