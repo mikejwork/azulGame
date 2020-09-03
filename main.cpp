@@ -49,12 +49,10 @@ void showCredits() {
 }
 
 int getInput() {
-    int a = -1;
-    while(a != 0){
+    int a = 0;
+    while(a != 1 || a != 2 || a != 3 || a != 4){
     std::cout << "> ";
-    
     std::cin >> a;
-    
     if(a == 1 || a == 2 || a ==3 || a == 4){
         return a;
     } else {
