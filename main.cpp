@@ -41,7 +41,7 @@ void showMenu() {
         std::cout << "Please enter a a valid number" << std::endl;
         showMenu();
     }
-    std::cout << std::endl << std::endl;
+    
 }
 
 void showCredits() {
@@ -65,14 +65,9 @@ void showCredits() {
 
 int getInput() {
     int a = 0;
-    while(a != 1 || a != 2 || a != 3 || a != 4){
     std::cout << "> ";
     std::cin >> a;
-    if(a == 1 || a == 2 || a ==3 || a == 4){
-        return a;
-    } else {
-        showMenu();
-    }
-    }
+    std::cout << std::endl;
     return a;
+    // We dont need that while loop, already have checks in showMenu()
 }
