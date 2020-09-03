@@ -64,8 +64,15 @@ void showCredits() {
 }
 
 int getInput() {
+    int a = 0;
+    while(a != 1 || a != 2 || a != 3 || a != 4){
     std::cout << "> ";
-    int a;
     std::cin >> a;
+    if(a == 1 || a == 2 || a ==3 || a == 4){
+        return a;
+    } else {
+        showMenu();
+    }
+    }
     return a;
 }
