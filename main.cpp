@@ -12,8 +12,6 @@ int getInput();
 SaveManager* saveManager = new SaveManager();
 
 int main(int argc, char** argv) {
-    
-    
     std::cout << "Welcome to Azul!" << 
     std::endl << "---------------------" << 
     std::endl;
@@ -36,25 +34,17 @@ void showMenu() {
     std::endl << "3. Credits" <<
     std::endl << "4. Quit \n" <<
     std::endl;
-    bool selected = false;
-    while (!selected) {
+    while (1) {
         int input = getInput();
         if (input == 1) {
             // TODO New Game
-            selected = true;
-            showMenu();
         } else if (input == 2) {
             loadSave();
-            selected = true;
         } else if (input == 3) {
             showCredits();
-            selected = true;
         } else if (input == 4) {
             exit();
-            selected = true;
         }
-    selected = false;
-
     }
     
 }
@@ -83,7 +73,7 @@ int getInput() {
     std::cout << "> ", std::cin >> a;
     if (std::cin.fail() || a > 4 || a < 1) {
         std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Invalid input" << std::endl;
     } else {
         return a;
@@ -93,5 +83,7 @@ int getInput() {
 }
 
 void loadSave() {
-
+    // For debugging, not finished.
+    saveManager->NewSave("New");
+    saveManager->LoadSave("New");
 }
