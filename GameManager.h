@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "Factory.h"
 
 #define MAX_ROUNDS 5
 
@@ -8,11 +9,21 @@ public:
     GameManager();
     GameManager(int saveFile);
     ~GameManager();
-
-    void initGame();
-
 private:
-    std::string first_name;
-    std::string last_name;
+    std::string playerOne;
+    std::string playerTwo;
+    std::string playerTurn;
     int currentRound;
+    
+    Factory* zero;
+    Factory* one;
+    Factory* two;
+    Factory* three;
+    Factory* four;
+    Factory* five;
+
+    void initPlayerNames();
+    void newRound();
+    void printFactories();
+    void setupFactories();
 };

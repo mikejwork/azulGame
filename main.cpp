@@ -10,6 +10,7 @@ void loadSave();
 int getInput();
 
 SaveManager* saveManager = new SaveManager();
+GameManager* gameManager;
 
 int main(int argc, char** argv) {
     std::cout << "Welcome to Azul!" << 
@@ -37,7 +38,7 @@ void showMenu() {
     while (1) {
         int input = getInput();
         if (input == 1) {
-            // TODO New Game
+            gameManager = new GameManager();
         } else if (input == 2) {
             loadSave();
         } else if (input == 3) {
