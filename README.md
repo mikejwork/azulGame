@@ -5,6 +5,7 @@
 ### Assignment 2 (v1.0) | Azul
 
 > **< Members >**  
-> Victoria Elliot - s3710716  
+> Issa Chanzi - s3783615  
 > Braden Smith - s3787174  
 > Michael Jurie - s3785631  
+
