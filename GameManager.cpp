@@ -1,83 +1,133 @@
 #include "GameManager.h"
 
 GameManager::GameManager() {
-    std::cout << "Starting a New Game" << std::endl << std::endl;
-    initPlayerNames();
-    std::cout << std::endl << "Let's Play!" << std::endl;
-    playerTurn = playerOne;
-    newRound();
+    std::cout << "Starting a New Game \n \n";
+    setupPlayers();
+    std::cout << "Let's play! \n \n";
     setupFactories();
-    printFactories();
+    player_turn = player1_name;
+    round_in_progress = true;
     
-    // CREATING FACTORY EXAMPLE
-    // Factory* zero = new Factory(0);
-    // Factory* one = new Factory(1);
-    
-    // Tile* f = new Tile('F');
-    // Tile* r = new Tile('R');
-    // Tile* y = new Tile('Y');
-    // Tile* b = new Tile('B');
+    for (int i = 0; i < 5; i++) { // Iterate over 5 rounds
+        std::cout << "=== Start Round === \n";
+        std::cout << "TURN FOR PLAYER: " << player_turn << "\n";
+        std::cout << "Factories: \n"; 
+        printFactories();
 
-    // zero->addTile(f);
-    // one->addTile(r);
-    // one->addTile(y);
-    // one->addTile(y);
-    // one->addTile(b);
-    // std::cout << "Factories: " << std::endl;
-    // zero->toString();
-    // one->toString();
-
-}
-
-// When a save file is loaded.
-GameManager::GameManager(int saveFile) {
-    // The initial order of the tile bag when the game was created. (Note that while your Azul implementation
-    // will always use the same order when a new game is created, you must support using a different order
-    // when loading from a saved-game file.)
-
-    // Player Names
-
-    // The order of turns taken by the players
-    GameManager();
+        // MOZAIC SHIT HERE
+        bool done = false;
+        while (!done) {
+            done = inputCommand();
+        }
+    }
 }
 
 GameManager::~GameManager() {
-
+    // TODO
 }
 
-void GameManager::initPlayerNames() {
-    std::cout << "Enter a name for player 1" << std::endl;
-    std::cout << "> ", std::cin >> playerOne;
-    std::cout << std::endl << "Enter a name for player 2" << std::endl;
-    std::cout << "> ", std::cin >> playerTwo;
+bool GameManager::inputCommand() {
+    std::cout << "> ";
+    std::istream& inputStream = std::cin;
+    std::string cmd;
+    double selected_factory; // number of the selected factory
+    char selected_colour; // char of the selected colour
+    double selected_row;
+    inputStream >> cmd;
+    if (cmd == "turn") {
+        inputStream >> selected_factory >> selected_colour >> selected_row;
+        if (turn(selected_factory, selected_colour, selected_row)) {
+            std::cout << "Turn successful." << std::endl;
+            return true;
+        } else {
+            std::cout << "Turn invalid." << std::endl;
+            return false;
+        }
+    } else if (cmd == "save") {
+        return true;
+    } else if (cmd == "exit") {
+        exit(0);
+    } else {
+        std::cout << "Invalid" << std::endl;
+        return false;
+    }
+    return false;
 }
 
-void GameManager::newRound() {
-    std::cout << "=== Start Round ===" << std::endl;
-    std::cout << "TURN FOR PLAYER: " << playerTurn << std::endl;
+bool GameManager::turn(double factory, char colour, double row) {
+    // 1. Select the factory and get number of the chosen colour in factory
+    //       -- Should error check for invalid selection and return false
+    return false;
+}
 
+void GameManager::setupFactories() {
+    TileBag* bag = new TileBag(); // New tilebag (linkedlist) object
+
+    std::string tiles = "YBBRRRLBULULRYBLBBLYRRUYUYUYUBBRLUBLRYLBLBUBUBRYRLLLRRUBYYBYYLRLRRYBURRLUYYYBUBLRUUBYLLBYYUULURYRUUL"; // Tiles, 20 of each colour, 100 total
+    for (std::string::size_type i = 0; i < tiles.size(); i++) {
+        Tile* newTile = new Tile(tiles[i]);
+        bag->addBack(newTile);
+    } // adds each tile as an object to the linked list
+
+    // Prints out the tiles and their index
+    // for (int i = 0; i != bag->size() + 1; i++) {
+    //     std::cout << "tile[" << i << "] = " << bag->get(i)->getIdentifier() << std::endl;
+    // }
+
+    centre = new Factory(0);
+    centre->addBack(new Tile('F'));
+
+    one = new Factory(1);
+    for (int i = 0; i < 4; i++) {
+        one->addBack(bag->get(0));
+        bag->removeFront();
+    } 
+
+    two = new Factory(2);
+    for (int i = 0; i < 4; i++) {
+        two->addBack(bag->get(0));
+        bag->removeFront();
+    }
+
+    three = new Factory(3);
+    for (int i = 0; i < 4; i++) {
+        three->addBack(bag->get(0));
+        bag->removeFront();
+    } 
+
+    four = new Factory(4);
+    for (int i = 0; i < 4; i++) {
+        four->addBack(bag->get(0));
+        bag->removeFront();
+    } 
+
+    five = new Factory(5);
+    for (int i = 0; i < 4; i++) {
+        five->addBack(bag->get(0));
+        bag->removeFront();
+    } 
 }
 
 void GameManager::printFactories() {
-    std::cout << "Factories:" << std::endl;
-    zero->toString();
+    centre->toString();
     one->toString();
     two->toString();
     three->toString();
     four->toString();
     five->toString();
-    std::cout << std::endl;
+    std::cout << "\n";
 }
 
-void GameManager::setupFactories() {
-    // TODO: Make tile bag
-    // Kinda confused on how it works but it isnt random, kinda like an array that is fixed, where u take tiles from front and put the back onto the end.
-    Tile* first = new Tile('F');
-    zero = new Factory(0);
-    one = new Factory(1);
-    two = new Factory(2);
-    three = new Factory(3);
-    four = new Factory(4);
-    five = new Factory(5);
-    zero->addTile(first);
+void GameManager::setupPlayers() {
+    std::cout << "Enter a name for player 1 \n> ";
+    std::cin >> player1_name;
+    std::cout << "\n";
+
+    std::cout << "Enter a name for player 2 \n> ";
+    std::cin >> player2_name;
+    std::cout << "\n";
+}
+
+void GameManager::test() {
+    // Temporary dont delete
 }

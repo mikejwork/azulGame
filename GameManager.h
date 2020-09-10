@@ -1,29 +1,41 @@
+#include "Factory.h"
+#include "Tile.h"
+#include "TileBag.h"
 #include <iostream>
 #include <string>
-#include "Factory.h"
-
-#define MAX_ROUNDS 5
+#include <limits>
+#include <sstream>
+#include <vector>
 
 class GameManager {
 public:
     GameManager();
-    GameManager(int saveFile);
     ~GameManager();
+
+    void test();
+
 private:
-    std::string playerOne;
-    std::string playerTwo;
-    std::string playerTurn;
-    int currentRound;
-    
-    Factory* zero;
+    void setupFactories();
+    void printFactories();
+    void setupPlayers();
+    bool inputCommand();
+    bool turn(double factory, char colour, double row);
+
+    int round_number;
+    bool round_in_progress;
+    std::string player1_name;
+    std::string player2_name;
+    std::string player_turn;
+
+    Factory* centre;
     Factory* one;
     Factory* two;
     Factory* three;
     Factory* four;
     Factory* five;
 
-    void initPlayerNames();
-    void newRound();
-    void printFactories();
-    void setupFactories();
+    // Turn command variables
+
+    // Save command variables
+        
 };
