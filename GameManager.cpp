@@ -1,20 +1,26 @@
 #include "GameManager.h"
 
+Player::Player(std::string name) :
+   name(name)
+{
+}
+
 GameManager::GameManager() {
     std::cout << "Starting a New Game \n \n";
     setupPlayers();
     std::cout << "Let's play! \n \n";
     setupFactories();
-    player_turn = player1_name;
     round_in_progress = true;
     
     for (int i = 0; i < 5; i++) { // Iterate over 5 rounds
         std::cout << "=== Start Round === \n";
-        std::cout << "TURN FOR PLAYER: " << player_turn << "\n";
+        std::cout << "TURN FOR PLAYER: " << playerTurn->name << "\n";
         std::cout << "Factories: \n"; 
         printFactories();
-
-        // MOZAIC SHIT HERE
+        std::cout << "Mosaic for " << playerTurn->name << std::endl;
+        playerTurn->mozaic->printMozaic();
+        playerTurn->mozaic->placeTiles(new Tile('U'), 2, 2);
+        playerTurn->mozaic->printMozaic();
         bool done = false;
         while (!done) {
             done = inputCommand();
@@ -48,7 +54,7 @@ bool GameManager::inputCommand() {
     } else if (cmd == "exit") {
         exit(0);
     } else {
-        std::cout << "Invalid" << std::endl;
+        std::cout << "Invalid command" << std::endl;
         return false;
     }
     return false;
@@ -56,7 +62,7 @@ bool GameManager::inputCommand() {
 
 bool GameManager::turn(double factory, char colour, double row) {
     // 1. Select the factory and get number of the chosen colour in factory
-    //       -- Should error check for invalid selection and return false
+    //       -> Should error check for invalid selection and return false
     return false;
 }
 
@@ -122,10 +128,15 @@ void GameManager::setupPlayers() {
     std::cout << "Enter a name for player 1 \n> ";
     std::cin >> player1_name;
     std::cout << "\n";
+    Player* one = new Player(player1_name);
+    one->mozaic = new Mozaic();
+    playerTurn = one;
 
     std::cout << "Enter a name for player 2 \n> ";
     std::cin >> player2_name;
     std::cout << "\n";
+    Player* two = new Player(player2_name);
+    two->mozaic = new Mozaic();
 }
 
 void GameManager::test() {

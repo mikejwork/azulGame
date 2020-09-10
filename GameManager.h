@@ -1,11 +1,20 @@
 #include "Factory.h"
 #include "Tile.h"
 #include "TileBag.h"
+#include "Mozaic.h"
 #include <iostream>
 #include <string>
 #include <limits>
 #include <sstream>
 #include <vector>
+
+class Player {
+public:
+   Player(std::string name);
+
+   std::string name;
+   Mozaic* mozaic;
+};
 
 class GameManager {
 public:
@@ -25,7 +34,7 @@ private:
     bool round_in_progress;
     std::string player1_name;
     std::string player2_name;
-    std::string player_turn;
+    Player* playerTurn;
 
     Factory* centre;
     Factory* one;

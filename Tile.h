@@ -1,3 +1,6 @@
+#ifndef TILE_H
+#define TILE_H
+
 class Tile {
     public:
         Tile(char identifier);
@@ -8,3 +11,5 @@ class Tile {
     private:
         char identifier;
 };
+
+#endif

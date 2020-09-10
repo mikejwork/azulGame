@@ -27,6 +27,8 @@ class Factory {
         void removeFront();
         void clear();
 
+        int numOfColour(Tile* tile);
+
         void toString();
 
     private:
