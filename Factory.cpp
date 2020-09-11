@@ -94,6 +94,40 @@ void Factory::toString() {
    std::cout << "\n";
 }
 
-int Factory::numOfColour(Tile* tile) {
-   
+int Factory::numOfColour(char tile) {
+   int count = 0;
+   TileNode* current = head;
+   while (current != nullptr) {
+      if (current->tile->getIdentifier() == tile) {
+         count++;
+      }
+      current = current->next;
+   }
+   return count;
+}
+
+void Factory::removeFromFactory(char tile) {
+   struct TileNode *prev, *cur;
+
+   while (head != nullptr && head->tile->getIdentifier() == tile) {
+      prev = head;
+      head = head->next;
+      free(prev);
+   }
+
+   prev = nullptr;
+   cur = head;
+
+   while (cur != nullptr) {
+      if (cur->tile->getIdentifier() == tile) {
+         if (prev != nullptr) {
+            prev->next = cur->next;
+         }
+         free(cur);
+         cur = prev->next;
+      } else {
+         prev = cur;
+         cur = cur->next;
+      }
+   }
 }
