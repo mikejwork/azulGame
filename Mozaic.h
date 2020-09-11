@@ -2,6 +2,9 @@
 #include <iostream>
 #include <vector>
 
+#ifndef MOZAIC_H
+#define MOZAIC_H
+
 class Mozaic {
 public:
     Mozaic();
@@ -17,3 +20,5 @@ public:
     void printMozaic();
 private:
 };
+
+#endif // MOZAIC_H

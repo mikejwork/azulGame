@@ -6,12 +6,13 @@ Player::Player(std::string name) :
 }
 
 GameManager::GameManager() {
+    setupTileBag();
     std::cout << "Starting a New Game \n \n";
     setupPlayers();
     std::cout << "Let's play! \n \n";
-    setupFactories();
     
-    for (int i = 0; i < 25; i++) { // Iterate over 5 rounds (25 for testing)
+    setupFactories();
+    for (int i = 0; i < 5; i++) { // 5 Rounds
         std::cout << "=== Start Round === \n";
         std::cout << "TURN FOR PLAYER: " << playerTurn->name << "\n";
         std::cout << "Factories: \n"; 
@@ -24,7 +25,11 @@ GameManager::GameManager() {
         while (!done) {
             done = inputCommand();
         }
+        
     }
+
+    std::cout << "=== GAME OVER === \n";
+    std::cout << "Final Scores: \n";
 }
 
 GameManager::~GameManager() {
@@ -62,45 +67,69 @@ bool GameManager::inputCommand() {
     return isSuccessful;
 }
 
-bool GameManager::turn(double factory, char colour, double row) {
-    Factory* selected;
-    if (factory == 0) { selected = centre;
-    } else if (factory == 1) { selected = one;
-    } else if (factory == 2) { selected = two; // this is ugly asf
-    } else if (factory == 3) { selected = three;
-    } else if (factory == 4) { selected = four;
-    } else if (factory == 5) { selected = five;
-    } else { return false; }
-
-    int amount = 0;
-    amount = selected->numOfColour(colour); // get the amount of the tile selected from the certain factory and store as int.
-
-    if (colour == 'F') {
-        std::cout << "You cannot pick the 'first' tile" << std::endl;
-        return false;
+bool GameManager::getFactory(double factory, Factory &factoryObj) {
+    bool isSuccess = false;
+    if (factory == 0) { 
+        factoryObj = *centre;
+        isSuccess = true;
+    } else if (factory == 1) { 
+        factoryObj = *one;
+        isSuccess = true;
+    } else if (factory == 2) { 
+        factoryObj = *two; 
+        isSuccess = true;
+    } else if (factory == 3) { 
+        factoryObj = *three;
+        isSuccess = true;
+    } else if (factory == 4) { 
+        factoryObj = *four;
+        isSuccess = true;
+    } else if (factory == 5) { 
+        factoryObj = *five; 
+        isSuccess = true;
     }
-
-    if (!playerTurn->mozaic->placeTiles(new Tile(colour), row, amount)) { // Check if the player is trying to place tiles in a filled row
-                                                                          // or a row with tiles of a different colour.
-        return false;
-    }
-    selected->removeFromFactory(colour); // Removes every tile from the factory with that certain colour.
-    return true;
+    return isSuccess;
 }
 
-void GameManager::setupFactories() {
-    TileBag* bag = new TileBag(); // New tilebag (linkedlist) object
+bool GameManager::turn(double factory, char colour, double row) {
+    int amount = 0;
+    bool turnSuccessful = true;
+    
+    
+    if (colour == 'F') {
+        std::cout << "You cannot pick the 'first' tile" << std::endl;
+        turnSuccessful = false;
+    }
+
+    Factory* selected = new Factory(99);
+    if (!getFactory(factory, *selected)) { // get the selected factory
+        std::cout << "Not a valid factory" << std::endl;
+        turnSuccessful = false;
+    }
+    amount = selected->numOfColour(colour); // get the amount of the tile selected from the certain factory and store as int.
+    
+    // Check if the player is trying to place tiles in a filled row
+    // or a row with tiles of a different colour.
+    if (!playerTurn->mozaic->placeTiles(new Tile(colour), row, amount)) {
+        turnSuccessful = false;
+    } else {
+        selected->removeFromFactory(colour, *centre); // Removes every tile from the factory with that certain colour.
+        selected->clear();
+    } 
+    return turnSuccessful;
+}
+
+void GameManager::setupTileBag() {
+    bag = new TileBag(); // New tilebag (linkedlist) object
 
     std::string tiles = "YBBRRRLBULULRYBLBBLYRRUYUYUYUBBRLUBLRYLBLBUBUBRYRLLLRRUBYYBYYLRLRRYBURRLUYYYBUBLRUUBYLLBYYUULURYRUUL"; // Tiles, 20 of each colour, 100 total
     for (std::string::size_type i = 0; i < tiles.size(); i++) {
         Tile* newTile = new Tile(tiles[i]);
         bag->addBack(newTile);
-    } // adds each tile as an object to the linked list
+    }
+}
 
-    // Prints out the tiles and their index
-    // for (int i = 0; i != bag->size() + 1; i++) {
-    //     std::cout << "tile[" << i << "] = " << bag->get(i)->getIdentifier() << std::endl;
-    // }
+void GameManager::setupFactories() {
 
     centre = new Factory(0);
     centre->addBack(new Tile('F'));

@@ -4,49 +4,35 @@
 #include "Factory.h"
 #include "GameManager.h"
 
-enum State {
-    NEWGAME,
-    LOADGAME,
-    CREDITS,
-    EXIT
-};
-
 // Function definitions
 void tests();
 void showCredits();
-State showMenu();
+int showMenu();
 
 int main(void) {
-    std::cout << "Welcome to Azul!" << std::endl 
-              << "--------------------\n" << std::endl;
-    State state = showMenu();
-    // This would be cleaner with a switch :(
-    if (state == NEWGAME) {
+    std::cout << "Welcome to Azul!" << std::endl << "--------------------\n" << std::endl;
+    int state = showMenu();
+    if (state == 1) {
         GameManager* game = new GameManager();
         game->test();
-    } else if (state == LOADGAME) {
+    } else if (state == 2) {
         // TODO
-    } else if (state == CREDITS) {
+    } else if (state == 3) {
         showCredits();
-    } else if (state == EXIT) {
+    } else if (state == 4) {
         exit(1);
-        // we would also cleanup everything here
-        // delete state, gameManager objects etc..
     }
 
     return EXIT_SUCCESS;
 }
 
-// New menu system using an enum 'State' this is the framework for the game menu / command system too.
-State showMenu() {
+int showMenu() {
     std::cout << "Menu" << std::endl 
               << "----" << std::endl
               << "1. New Game" << std::endl
               << "2. Load Game" << std::endl
               << "3. Credits" << std::endl
               << "4. Quit" << std::endl;
-    // int a    - holds the 1-4 value for the menu
-    // bool notValid    - Determines if the given input is valid, if not, repeats input.
     int a = 0;
     bool notValid = false;
     do {
@@ -59,11 +45,7 @@ State showMenu() {
             notValid = true;
         }
     } while (notValid);
-    if (a == 1) { return NEWGAME; } 
-    else if (a == 2) { return LOADGAME; } 
-    else if (a == 3) { return CREDITS; } 
-    else if (a == 4) { return EXIT; } 
-    return EXIT;
+    return a;
 }
 
 void showCredits() {

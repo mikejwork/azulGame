@@ -22,6 +22,7 @@ public:
     ~GameManager();
 
     void test();
+    Factory* centre;
 
 private:
     void setupFactories();
@@ -35,8 +36,11 @@ private:
     std::string player1_name;
     std::string player2_name;
     Player* playerTurn;
+    bool getFactory(double factory, Factory &factoryObj);
 
-    Factory* centre;
+    TileBag* bag;
+    void setupTileBag();
+
     Factory* one;
     Factory* two;
     Factory* three;

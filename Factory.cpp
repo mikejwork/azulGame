@@ -80,16 +80,26 @@ void Factory::removeFront() {
 }
 
 void Factory::clear() {
-   head = nullptr;
+   TileNode* p;
+   TileNode* temp;
+
+   p = head;
+   while (p != nullptr) {
+      temp = p->next;
+      delete p;
+      p = temp;
+   }
 }
 
 
 void Factory::toString() {
    std::cout << factoryNum << ": "; 
-   TileNode* current = head;
-   while (current != nullptr) {
-      std::cout << current->tile->getIdentifier() << " ";
-      current = current->next;
+   if (head->tile != nullptr) {
+      TileNode* current = head;
+      while (current != nullptr) {
+         std::cout << current->tile->getIdentifier() << " ";
+         current = current->next;
+      }
    }
    std::cout << "\n";
 }
@@ -106,28 +116,37 @@ int Factory::numOfColour(char tile) {
    return count;
 }
 
-void Factory::removeFromFactory(char tile) {
-   struct TileNode *prev, *cur;
-
-   while (head != nullptr && head->tile->getIdentifier() == tile) {
-      prev = head;
-      head = head->next;
-      free(prev);
-   }
-
-   prev = nullptr;
-   cur = head;
-
-   while (cur != nullptr) {
-      if (cur->tile->getIdentifier() == tile) {
-         if (prev != nullptr) {
-            prev->next = cur->next;
-         }
-         free(cur);
-         cur = prev->next;
-      } else {
-         prev = cur;
-         cur = cur->next;
+void Factory::removeFromFactory(char tile, Factory &centre) {
+   
+   TileNode* current = head;
+   while (current != nullptr) {
+      if (current->tile->getIdentifier() != tile) {
+         centre.addBack(current->tile);
       }
+      current = current->next;
    }
+
+   // struct TileNode *prev, *cur;
+
+   // while (head != nullptr && head->tile->getIdentifier() == tile) {
+   //    prev = head;
+   //    head = head->next;
+   //    delete prev;
+   // }
+
+   // prev = nullptr;
+   // cur = head;
+
+   // while (cur != nullptr) {
+   //    if (cur->tile->getIdentifier() == tile) {
+   //       if (prev != nullptr) {
+   //          prev->next = cur->next;
+   //       }
+   //       free(cur);
+   //       cur = prev->next;
+   //    } else {
+   //       prev = cur;
+   //       cur = cur->next;
+   //    }
+   // }
 }

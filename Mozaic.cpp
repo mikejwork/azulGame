@@ -30,7 +30,7 @@ void Mozaic::printMozaic() {
     }
     std::cout << "broken: ";
     for (std::size_t i = 0; i < vecBroken.size(); i++) {
-        std::cout << vecBroken[i]->getIdentifier() << std::endl;
+        std::cout << vecBroken[i]->getIdentifier() << " ";
     }
     std::cout << "\n \n";
 }
@@ -56,41 +56,50 @@ void Mozaic::init() {
 
 bool Mozaic::placeTiles(Tile* tile, int row, int count) {
     Tile* newTile = new Tile(*tile);
+    bool isSuccessful = true;
+    bool rowEmpty = true;
+    char rowColour = ' ';
     int space = 0;
     int tiles = 0;
-    char rowColour = '?';
-    for (int i = 0; i < 5; i++) {
-        if (pattern_lines[row - 1][4 - i]->getIdentifier() == '.') {
-            space++;
-        } else if (pattern_lines[row - 1][4 - i]->getIdentifier() != '?') {
-            tiles++;
-            // if (pattern_lines[row - 1][4 - i]->getIdentifier() != '.') {
-            //     rowColour = pattern_lines[row - 1][4 - i]->getIdentifier();
-            // }
+
+    if (pattern_lines[row - 1][4]->getIdentifier() != '.') {
+        rowEmpty = false;
+        rowColour = pattern_lines[row - 1][4]->getIdentifier();
+    }
+
+    if (!rowEmpty) {
+        if (tile->getIdentifier() != rowColour) {
+            std::cout << "The colour " << rowColour << " is already in that row" << std::endl;
+            isSuccessful = false;
         }
     }
+    if (isSuccessful) {
+        for (int i = 0; i < 5; i++) {
+            if (pattern_lines[row - 1][4 - i]->getIdentifier() == '.') {
+                space++;
+            } else if (pattern_lines[row - 1][4 - i]->getIdentifier() != '?') {
+                tiles++;
+            }
+        }
 
-    if (tile->getIdentifier() != rowColour) {
-        std::cout << "There is another colour already in that row" << rowColour << std::endl;
-        return false;
-    }
-
-    int numBroken;
-    if (count > space) {
-        numBroken = count - space;
-        count = space;
-        for (int i = 0; i < numBroken; i++) {
-            vecBroken.push_back(tile);
+        int numBroken;
+        if (count > space) {
+            numBroken = count - space;
+            count = space;
+            for (int i = 0; i < numBroken; i++) {
+                vecBroken.push_back(tile);
+            }
         }
     }
 
     if (space == 0) {
         std::cout << "Not enough space for move!" << std::endl;
-        return false;
+        isSuccessful = false;
     }
-
-    for (int i = 0; i < count; i++) {
-        pattern_lines[row - 1][4 - i - tiles] = newTile;
+    if (isSuccessful) {
+        for (int i = 0; i < count; i++) {
+            pattern_lines[row - 1][4 - i - tiles] = newTile;
+        }
     }
-    return true;
+    return isSuccessful;
 }

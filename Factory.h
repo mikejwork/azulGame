@@ -1,10 +1,10 @@
 #include "Tile.h"
+#include "Mozaic.h"
 #include <iostream>
 #include <string>
 
 #ifndef FACTORY_H
 #define FACTORY_H
-#define FACTORY_MAX 4
 
 class TileNode {
 public:
@@ -26,7 +26,7 @@ class Factory {
         void removeBack();
         void removeFront();
         void clear();
-        void removeFromFactory(char tile);
+        void removeFromFactory(char tile, Factory &centre);
         int numOfColour(char tile);
 
         void toString();
