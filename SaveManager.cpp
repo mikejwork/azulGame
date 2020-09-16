@@ -18,7 +18,7 @@ void SaveManager::NewSave(std::string saveName) {
             out << i << std::endl;
         }
     }
-    out.close(); 
+    out.close();
 }
 
 void SaveManager::LoadSave(std::string saveName) {
@@ -35,4 +35,3 @@ void SaveManager::LoadSave(std::string saveName) {
     }
     in.close();
 }
-
