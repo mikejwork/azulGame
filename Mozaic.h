@@ -1,23 +1,35 @@
-#include "Tile.h"
-#include <iostream>
-#include <vector>
-
 #ifndef MOZAIC_H
 #define MOZAIC_H
 
-class Mozaic {
+#define NUM_ROWS 5
+
+#include "tile.h"
+#include "row.h"
+#include <vector>
+#include <iostream>
+
+class Mozaic
+{
 public:
     Mozaic();
     ~Mozaic();
 
-    Tile* mozaic[5][5];
-    Tile* pattern_lines[5][5];
-    Tile* broken[0]; // Broken tiles array
-    std::vector<Tile*> vecBroken;
+    Tile *mozaic[5][5];
+    char mask[5][5] = {{'B', 'Y', 'R', 'U', 'L'},
+                       {'L', 'B', 'Y', 'R', 'U'},
+                       {'U', 'L', 'B', 'Y', 'R'},
+                       {'R', 'U', 'L', 'B', 'Y'},
+                       {'Y', 'R', 'U', 'L', 'B'}};
 
-    bool placeTiles(Tile* tile, int row, int count);
-    void init();
-    void printMozaic();
+    std::vector<Row *> rows;
+    std::vector<Tile *> broken;
+
+    void print_mozaic();
+
+    void update_mozaic();
+
+    void add_tiles(int amount, int row, Tile *tile);
+
 private:
 };
 

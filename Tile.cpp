@@ -1,21 +1,17 @@
-#include "Tile.h"
+#include "tile.h"
 
-Tile::Tile(char identifier) :
-    identifier(identifier)
-{
-
-}
+Tile::Tile(char colour) :
+    colour(colour)
+{}
 
 Tile::Tile(const Tile& other) :
-    identifier(other.identifier)
+    colour(other.colour)
+{}
+
+Tile::~Tile()
+{}
+
+char Tile::get_colour()
 {
-
-}
-
-Tile::~Tile() {
-
-}
-
-char Tile::getIdentifier() {
-    return identifier;
+    return this->colour;
 }

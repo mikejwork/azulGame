@@ -1,152 +1,49 @@
-#include "Factory.h"
+#include "factory.h"
+#define MAX_TILES 4
 
-TileNode::TileNode(Tile* tile, TileNode* next) :
-   tile(tile),
-   next(next)
+Factory::Factory(int factory_number) :
+    factory_number(factory_number)
 {}
 
-Factory::Factory(int num) :
-    factoryNum(num)
-{}
+Factory::~Factory() {}
 
-Factory::~Factory() {
-    // TODO
+int Factory::get_number()
+{
+    return this->factory_number;
 }
 
-int Factory::size() {
+void Factory::add_tile(Tile* tile)
+{
+    // Create deep copy and add to back
+    tiles.push_back(new Tile(*tile));
+}
+
+void Factory::clear()
+{
+    tiles.clear();
+    empty = true;
+}
+
+int Factory::get_amount(char colour) 
+{
     int count = 0;
-    TileNode* current = head;
-    while (current != nullptr) {
-        ++count;
-        current = current->next;
+    for (std::string::size_type i = 0; i < tiles.size(); i++)
+    {
+        if (tiles[i]->get_colour() == colour) {
+            count++;
+        }
     }
     return count;
 }
 
-Tile* Factory::get(int index) {
-   int count = 0;
-   TileNode* current = head;
-   Tile* tile = new Tile('?');
-   if (index >= 0 && index < size()) {
-       while (count < index) {
-            ++count;
-            current = current->next;
-       }
-       tile = current->tile;
-   }
-   return tile;
-}
-
-void Factory::addFront(Tile* tile) {
-   TileNode* newNode = new TileNode(tile, head);
-   head = newNode;
-}
-
-void Factory::addBack(Tile* tile) {
-   TileNode* toAdd = new TileNode(tile, nullptr);
-
-   if (head == nullptr) {
-      head = toAdd;
-   } else {
-      TileNode* current = head;
-      while (current->next != nullptr) {
-         current = current->next;
-      }  
-      current->next = toAdd;
-   }
-}
-
-void Factory::removeBack() {
-   if (head != nullptr) {
-      if (head->next == nullptr) {
-         head = nullptr;
-      }
-
-      TileNode* temp = head;
-      while (temp->next->next != nullptr) {
-         temp = temp->next;
-      }
- 
-      temp->next = nullptr;
-   }
-}
-
-void Factory::removeFront() {
-   if (head != nullptr) {
-      TileNode* temp = head;
-      head = head->next;
-      delete temp;
-   }
-}
-
-void Factory::clear() {
-   TileNode* p;
-   TileNode* temp;
-
-   p = head;
-   while (p != nullptr) {
-      temp = p->next;
-      delete p;
-      p = temp;
-   }
-}
-
-
-void Factory::toString() {
-   std::cout << factoryNum << ": "; 
-   if (head->tile != nullptr) {
-      TileNode* current = head;
-      while (current != nullptr) {
-         std::cout << current->tile->getIdentifier() << " ";
-         current = current->next;
-      }
-   }
-   std::cout << "\n";
-}
-
-int Factory::numOfColour(char tile) {
-   int count = 0;
-   TileNode* current = head;
-   while (current != nullptr) {
-      if (current->tile->getIdentifier() == tile) {
-         count++;
-      }
-      current = current->next;
-   }
-   return count;
-}
-
-void Factory::removeFromFactory(char tile, Factory &centre) {
-   
-   TileNode* current = head;
-   while (current != nullptr) {
-      if (current->tile->getIdentifier() != tile) {
-         centre.addBack(current->tile);
-      }
-      current = current->next;
-   }
-
-   // struct TileNode *prev, *cur;
-
-   // while (head != nullptr && head->tile->getIdentifier() == tile) {
-   //    prev = head;
-   //    head = head->next;
-   //    delete prev;
-   // }
-
-   // prev = nullptr;
-   // cur = head;
-
-   // while (cur != nullptr) {
-   //    if (cur->tile->getIdentifier() == tile) {
-   //       if (prev != nullptr) {
-   //          prev->next = cur->next;
-   //       }
-   //       free(cur);
-   //       cur = prev->next;
-   //    } else {
-   //       prev = cur;
-   //       cur = cur->next;
-   //    }
-   // }
+void Factory::remove_specific(char colour)
+{
+    std::vector<Tile*> tiles_cpy;
+    for (std::string::size_type i = 0; i < tiles.size(); i++)
+    {
+        if (tiles[i]->get_colour() != colour) {
+            tiles_cpy.push_back(tiles[i]);
+        }
+    }
+    tiles = tiles_cpy;
 }

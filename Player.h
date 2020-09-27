@@ -2,20 +2,21 @@
 #define PLAYER_H
 
 #include <string>
+#include "mozaic.h"
 
-#include "Mozaic.h"
-
-class Player {
+class Player
+{
 public:
-   Player (std::string name);
-   ~Player ();
+    Player(std::string name);
+    ~Player();
 
-   std::string getName ();
-   Mozaic * getMozaic ();
+    std::string get_name();
+    Mozaic* get_mozaic();
 
 private:
-   std::string name;
-   Mozaic* mozaic;
+    std::string name;
+    Mozaic* mozaic;
+
 };
 
-#endif
+#endif // PLAYER_H

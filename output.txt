@@ -1,0 +1,189 @@
+Welcome to Azul!
+--------------------
+
+Menu
+----
+1. New Game 
+2. Load Game 
+3. Credits 
+4. Quit 
+ 
+> 
+Starting a new game 
+ 
+Enter a name for player 1
+> 
+Enter a name for player 2
+> 
+Let's Play! 
+
+=== Start Round === 
+Turn for player: A
+Factories: 
+0: F 
+1: Y B B R 
+2: R R L B 
+3: U L U L 
+4: R Y B L 
+5: B B L Y 
+
+Mozaic for: A
+1:         . || . . . . .
+2:       . . || . . . . .
+3:     . . . || . . . . .
+4:   . . . . || . . . . .
+5: . . . . . || . . . . .
+broken: 
+> row size: 0
+
+=== Start Round === 
+Turn for player: B
+Factories: 
+0: F Y R 
+1: 
+2: R R L B 
+3: U L U L 
+4: R Y B L 
+5: B B L Y 
+
+Mozaic for: B
+1:         . || . . . . .
+2:       . . || . . . . .
+3:     . . . || . . . . .
+4:   . . . . || . . . . .
+5: . . . . . || . . . . .
+broken: 
+> row size: 0
+
+=== Start Round === 
+Turn for player: A
+Factories: 
+0: F Y R L B 
+1: 
+2: 
+3: U L U L 
+4: R Y B L 
+5: B B L Y 
+
+Mozaic for: A
+1:         . || . . . . .
+2:       B B || . . . . .
+3:     . . . || . . . . .
+4:   . . . . || . . . . .
+5: . . . . . || . . . . .
+broken: 
+> row size: 0
+
+=== Start Round === 
+Turn for player: B
+Factories: 
+0: F Y R L B L Y 
+1: 
+2: 
+3: U L U L 
+4: R Y B L 
+5: 
+
+Mozaic for: B
+1:         . || . . . . .
+2:       R R || . . . . .
+3:     . . . || . . . . .
+4:   . . . . || . . . . .
+5: . . . . . || . . . . .
+broken: 
+> row size: 0
+
+=== Start Round === 
+Turn for player: A
+Factories: 
+0: F Y R L B L Y Y B L 
+1: 
+2: 
+3: U L U L 
+4: 
+5: 
+
+Mozaic for: A
+1:         . || . . . . .
+2:       B B || . . . . .
+3:     . B B || . . . . .
+4:   . . . . || . . . . .
+5: . . . . . || . . . . .
+broken: 
+> row size: 0
+
+=== Start Round === 
+Turn for player: B
+Factories: 
+0: F Y R L B L Y Y B L L L 
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Mozaic for: B
+1:         R || . . . . .
+2:       R R || . . . . .
+3:     . . . || . . . . .
+4:   . . . . || . . . . .
+5: . . . . . || . . . . .
+broken: 
+> row size: 0
+
+=== Start Round === 
+Turn for player: A
+Factories: 
+0: R L B L B L L L 
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Mozaic for: A
+1:         . || . . . . .
+2:       B B || . . . . .
+3:     . B B || . . . . .
+4:   . . U U || . . . . .
+5: . . . . . || . . . . .
+broken: 
+> row size: 0
+
+=== Start Round === 
+Turn for player: B
+Factories: 
+0: R B B 
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Mozaic for: B
+1:         R || . . . . .
+2:       R R || . . . . .
+3:     Y Y Y || . . . . .
+4:   . . . . || . . . . .
+5: . . . . . || . . . . .
+broken: F 
+> row size: 0
+
+=== Start Round === 
+Turn for player: A
+Factories: 
+0: R 
+1: 
+2: 
+3: 
+4: 
+5: 
+
+Mozaic for: A
+1:         . || . . . . .
+2:       B B || . . . . .
+3:     . B B || . . . . .
+4:   . . U U || . . . . .
+5: L L L L L || . . . . .
+broken: 
+> row size: 0

@@ -1,39 +1,28 @@
-#include "Tile.h"
-#include "Mozaic.h"
-#include <iostream>
-#include <string>
-
 #ifndef FACTORY_H
 #define FACTORY_H
+#include "tile.h"
+#include <vector>
+#include <string>
 
-class TileNode {
+class Factory
+{
 public:
-   TileNode(Tile* tile, TileNode* next);
+    Factory(int factory_number);
+    ~Factory();
 
-   Tile* tile;
-   TileNode* next;
-};
+    int get_number();
 
-class Factory {
-    public:
-        Factory(int num);
-        ~Factory();
+    void add_tile(Tile *tile);
+    void remove_specific(char colour);
+    void clear();
+    int get_amount(char c);
 
-        int size();
-        Tile* get(int index);
-        void addBack(Tile* tile);
-        void addFront(Tile* tile);
-        void removeBack();
-        void removeFront();
-        void clear();
-        void removeFromFactory(char tile, Factory &centre);
-        int numOfColour(char tile);
+    std::vector<Tile *> tiles;
 
-        void toString();
+    bool empty = false;
 
-    private:
-        int factoryNum;
-        TileNode* head;
+private:
+    int factory_number;
 };
 
 #endif // FACTORY_H

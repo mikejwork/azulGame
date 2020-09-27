@@ -1,51 +1,41 @@
-#include "TileBag.h"
+#include "tilebag.h"
 
 Node::Node(Tile* tile, Node* next) :
    tile(tile),
    next(next)
 {}
 
-TileBag::TileBag() {}
+TileBag::TileBag() {
+   size = 0;
+}
 
-TileBag::TileBag(TileBag& other) 
+TileBag::~TileBag() 
 {
    // TODO
 }
 
-TileBag::~TileBag() {
-   // TODO
+int TileBag::get_size() 
+{
+   return this->size;
 }
 
-int TileBag::size() {
+Tile* TileBag::get(int index) 
+{
    int count = 0;
    Node* current = head;
-   while (current != nullptr) {
-       ++count;
-       current = current->next;
-   }
-   return count;
-}
-
-Tile* TileBag::get(int index) {
-   int count = 0;
-   Node* current = head;
-   Tile* tile = new Tile('?');
-   if (index >= 0 && index < size()) {
+   Tile* tile = nullptr;
+   if (index >= 0 && index < size) 
+   {
        while (count < index) {
             ++count;
             current = current->next;
        }
-       tile = current->tile;
+       tile = new Tile(*current->tile);
    }
    return tile;
 }
 
-void TileBag::addFront(Tile* tile) {
-   Node* newNode = new Node(tile, head);
-   head = newNode;
-}
-
-void TileBag::addBack(Tile* tile) {
+void TileBag::add_back(Tile* tile) {
    Node* toAdd = new Node(tile, nullptr);
 
    if (head == nullptr) {
@@ -57,31 +47,25 @@ void TileBag::addBack(Tile* tile) {
       }  
       current->next = toAdd;
    }
+   size++;
 }
 
-void TileBag::removeBack() {
-   if (head != nullptr) {
-      if (head->next == nullptr) {
-         head = nullptr;
-      }
-
-      Node* temp = head;
-      while (temp->next->next != nullptr) {
-         temp = temp->next;
-      }
- 
-      temp->next = nullptr;
-   }
-}
-
-void TileBag::removeFront() {
+void TileBag::remove_front() {
    if (head != nullptr) {
       Node* temp = head;
       head = head->next;
       delete temp;
    }
+   size--;
 }
 
-void TileBag::clear() {
-   head = nullptr;
+void TileBag::toString() 
+{
+   Node* current = head;
+   while (current != nullptr) 
+   {
+      std::cout << current->tile->get_colour();
+       current = current->next;
+   }
+   std::cout << "\n";
 }

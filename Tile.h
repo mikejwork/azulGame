@@ -1,15 +1,17 @@
 #ifndef TILE_H
 #define TILE_H
 
-class Tile {
-    public:
-        Tile(char identifier);
-        Tile(const Tile& other);
-        ~Tile();
+class Tile
+{
+public:
+    Tile(char colour);
+    Tile(const Tile& other);
+    ~Tile();
 
-        char getIdentifier();
-    private:
-        char identifier;
-};
+    char get_colour();
 
-#endif
+private:
+    char colour;
+};  
+
+#endif // TILE_H

@@ -1,22 +1,22 @@
-#include "Player.h"
+#include "player.h"
 
 Player::Player(std::string name) :
-   name(name)
+    name(name)
 {
-   this->mozaic = new Mozaic ();
+    this->mozaic = new Mozaic();
+}    
+
+Player::~Player()
+{
+    delete this->mozaic;
 }
 
-Player::~Player ()
-{
-   delete this->mozaic;
-}
-
-std::string Player::getName ()
+std::string Player::get_name()
 {
     return this->name;
 }
 
-Mozaic * Player::getMozaic ()
+Mozaic* Player::get_mozaic()
 {
     return this->mozaic;
 }

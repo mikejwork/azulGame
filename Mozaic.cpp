@@ -1,105 +1,107 @@
-#include "Mozaic.h"
+#include "mozaic.h"
 
-
-Mozaic::Mozaic() {
-    init();
-}
-
-Mozaic::~Mozaic() {
-    
-}
-
-void Mozaic::printMozaic() {
-    int blank = 4;
-    int dots = 1;
-    for (int i = 0; i < 5; i++) {
-        std::cout << i + 1 << ":";
-        for (int j = 0; j < blank; j++) {
-            std::cout << "  ";
-        }
-        for (int k = 0; k < dots; k++) {
-            std::cout << " " << pattern_lines[i][k + blank]->getIdentifier();
-        }
-        blank--;
-        dots++;
-        std::cout << " || ";
-        for (int ii = 0; ii < 5; ii++) {
-            std::cout << mozaic[i][ii]->getIdentifier() << " ";
-        }
-        std::cout << std::endl;
+Mozaic::Mozaic()
+{
+    // add the five rows to the mozaic
+    for (int i = 0; i < 5; i++)
+    {
+        rows.push_back(new Row());
     }
+
+    // rows[3]->add(new Tile('F'));
+    // rows[3]->add(new Tile('U'));
+    // rows[3]->add(new Tile('C'));
+    // rows[3]->add(new Tile('K'));
+}
+
+Mozaic::~Mozaic()
+{
+    for (int i = 0; i < NUM_ROWS; i++)
+    {
+        for (int x = 0; x < NUM_ROWS; x++)
+        {
+            mozaic[i][x] = nullptr;
+        }
+    }
+}
+
+void Mozaic::print_mozaic()
+{
+    int row_num = 1;
+    int blank_space = 4;
+    for (int row = 1; row < 6; row++)
+    {
+        std::cout << row << ":";
+        for (int spacing = 0; spacing < blank_space; spacing++)
+        {
+            std::cout << "  "; //Prints the empty space
+        }
+
+        int empty = row_num - rows[row_num - 1]->get_size();
+        for (int index = 0; index < empty; index++)
+        {
+            std::cout << " ."; //Prints the amount of dots for that row
+        }
+
+        for (int index = 0; index < rows[row_num - 1]->get_size(); index++)
+        {
+            std::cout << " " << rows[row_num - 1]->get_index(index)->get_colour(); //Places the tile colour
+        }
+        blank_space--;
+        row_num++;
+
+        std::cout << " ||";
+        for (int i = 0; i < 5; i++)
+        { //need to change 5
+            if (mozaic[row - 1][i] == nullptr)
+            {
+                std::cout << " .";
+            }
+            else
+            {
+                std::cout << " " << mozaic[row - 1][i]->get_colour();
+            }
+        }
+        std::cout << "\n";
+    }
+
     std::cout << "broken: ";
-    for (std::size_t i = 0; i < vecBroken.size(); i++) {
-        std::cout << vecBroken[i]->getIdentifier() << " ";
+
+    for (std::string::size_type i = 0; i < broken.size(); i++)
+    {
+        std::cout << broken[i]->get_colour() << " ";
     }
-    std::cout << "\n \n";
+    std::cout << "\n";
 }
 
-void Mozaic::init() {
-    Tile* empty = new Tile('.');
-    int blank = 4;
-    int dots = 1;
-    for (int i = 0; i < 5; i++) {
-        for (int ii = 0; ii < 5; ii++) {
-            mozaic[i][ii] = empty;
+void Mozaic::update_mozaic()
+{
+    int row_num = 1;
+    for (int row = 0; row < NUM_ROWS; row++)
+    {
+        int size = row_num - rows[row_num - 1]->get_size(); //size will return the value of how many empty spaces are in the row
+        if (size == 0)
+        {
+            for (int i = 0; i < NUM_ROWS; i++)
+            {
+                if (rows[row_num - 1]->get_index(row)->get_colour() == mask[row][i]) 
+                {
+                    mozaic[row_num - 1][i] = new Tile(rows[row_num - 1]->get_index(row)->get_colour());
+                }
+            }
+            rows[row_num - 1]->clear_row();
         }
-        for (int j = 0; j < blank; j++) {
-            pattern_lines[i][j] = new Tile('?'); // Setting this value to ? because it isnt seen and i need something that isnt just a dot to check for clear spaces.
-        }
-        for (int k = 0; k < dots; k++) {
-             pattern_lines[i][k + blank] = new Tile('.');
-        }
-        blank--;
-        dots++;
+        row_num++;
     }
 }
 
-bool Mozaic::placeTiles(Tile* tile, int row, int count) {
-    Tile* newTile = new Tile(*tile);
-    bool isSuccessful = true;
-    bool rowEmpty = true;
-    char rowColour = ' ';
-    int space = 0;
-    int tiles = 0;
 
-    if (pattern_lines[row - 1][4]->getIdentifier() != '.') {
-        rowEmpty = false;
-        rowColour = pattern_lines[row - 1][4]->getIdentifier();
-    }
 
-    if (!rowEmpty) {
-        if (tile->getIdentifier() != rowColour) {
-            std::cout << "The colour " << rowColour << " is already in that row" << std::endl;
-            isSuccessful = false;
-        }
-    }
-    if (isSuccessful) {
-        for (int i = 0; i < 5; i++) {
-            if (pattern_lines[row - 1][4 - i]->getIdentifier() == '.') {
-                space++;
-            } else if (pattern_lines[row - 1][4 - i]->getIdentifier() != '?') {
-                tiles++;
-            }
-        }
 
-        int numBroken;
-        if (count > space) {
-            numBroken = count - space;
-            count = space;
-            for (int i = 0; i < numBroken; i++) {
-                vecBroken.push_back(tile);
-            }
-        }
+void Mozaic::add_tiles(int amount, int row, Tile *tile)
+{
+    for (int i = 0; i < amount; i++)
+    {
+        rows[row - 1]->add(new Tile(*tile));
     }
-
-    if (space == 0) {
-        std::cout << "Not enough space for move!" << std::endl;
-        isSuccessful = false;
-    }
-    if (isSuccessful) {
-        for (int i = 0; i < count; i++) {
-            pattern_lines[row - 1][4 - i - tiles] = newTile;
-        }
-    }
-    return isSuccessful;
 }

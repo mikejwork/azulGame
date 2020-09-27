@@ -1,10 +1,7 @@
-#include <iostream>
-#include <fstream>
-#include "Tile.h"
-
-
 #ifndef TILEBAG_H
 #define TILEBAG_H
+#include "tile.h"
+#include <iostream>
 
 class Node {
 public:
@@ -17,19 +14,18 @@ public:
 class TileBag {
 public:
    TileBag();
-   TileBag(TileBag& other);
    ~TileBag();
 
-   int size();
+   int get_size();
    Tile* get(int index);
-   void addBack(Tile* tile);
-   void addFront(Tile* tile);
-   void removeBack();
-   void removeFront();
-   void clear();
+   void add_back(Tile* tile);
+   void remove_front();
+
+   
+   void toString();
 
 private:
-
+   int size;
    Node* head;
 };
 
