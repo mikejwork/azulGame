@@ -7,6 +7,7 @@ Mozaic::Mozaic()
     {
         rows.push_back(new Row());
     }
+    player_points = 0;
 }
 
 Mozaic::~Mozaic()
@@ -76,7 +77,7 @@ void Mozaic::update_mozaic()
                 if (rows[row_num - 1]->get_index(row)->get_colour() == mask[row][i])
                 {
                     mozaic[row_num - 1][i] = new Tile(rows[row_num - 1]->get_index(row)->get_colour());
-                    update_points(row_num, i);
+                    player_points = count(row_num - 1, i);
                 }
             }
             rows[row_num - 1]->clear_row();
@@ -84,22 +85,19 @@ void Mozaic::update_mozaic()
         row_num++;
     }
 }
-
-void Mozaic::update_points(int row_num, int i)
-{
-    count(row_num - 1, i);
+int Mozaic::get_player_points() {
+    int temp = this->player_points;
+    this->player_points = 0;
+    return temp;
 }
 
-int Mozaic::count(int row_num, int i)
-{ //change i to col
+
+int Mozaic::count(int row_num, int col)
+{
     int b = row_num;
     int f = row_num;
-    int l = i;
-    int r = i;
-    int back = 1;
-    int top = 2;
-    int left = 3;
-    int right = 4;
+    int l = col;
+    int r = col;
 
     int countRight = 0;
     int countTop = 0;
@@ -109,7 +107,7 @@ int Mozaic::count(int row_num, int i)
     bool once;
 
     once = true;
-    while (!returnCheck(row_num, r, right))
+    while (!returnCheck(row_num, r, RIGHT))
     {
         if (once == true) {
             countRight = 1;
@@ -118,10 +116,9 @@ int Mozaic::count(int row_num, int i)
         countRight++;
         r++;
     }
-    std::cout << "COUNT RIGHT: " << countRight << std::endl;
     once = true;
 
-    while (!returnCheck(row_num, l, left))
+    while (!returnCheck(row_num, l, LEFT))
     {
         if (once == true) {
             countLeft = 1;
@@ -130,10 +127,9 @@ int Mozaic::count(int row_num, int i)
         countLeft++;
         l--;
     }
-    std::cout << "COUNT LEFT: " << countLeft << std::endl;
     once = true;
 
-    while (!returnCheck(b, i, back))
+    while (!returnCheck(b, col, BACK))
     {
         if (once == true) {
             countBot = 1;
@@ -142,11 +138,9 @@ int Mozaic::count(int row_num, int i)
         countBot++;
         b++;
     }
-
-    std::cout << "COUNT Bot: " << countBot << std::endl;
     once = true;
 
-    while (!returnCheck(f, i, top))
+    while (!returnCheck(f, col, TOP)) 
     {
         if (once == true) {
             countTop = 1;
@@ -155,10 +149,6 @@ int Mozaic::count(int row_num, int i)
         countTop++;
         f--;
     }
-    std::cout << "COUNT Top: " << countTop << std::endl;
-
-
-    
     if (!(countRight + countLeft + countTop + countBot) == 0)
     {
         result = countRight + countLeft + countTop + countBot;
@@ -171,11 +161,10 @@ int Mozaic::count(int row_num, int i)
 bool Mozaic::returnCheck(int row_num, int i, int a)
 {
     bool ans = true;
-
     if (a == 1)
     {
-        //GOES DOWN X
-        if (row_num + 1 <= 5)
+        //CHECKS DOWN
+        if (row_num + 1 <= 5) //This prevents checking outside of array
         {
             if (mozaic[row_num + 1][i] != nullptr)
             {
@@ -186,7 +175,7 @@ bool Mozaic::returnCheck(int row_num, int i, int a)
     }
     else if (a == 2)
     {
-        //Checks UP
+        //CHECKS UP
         if (row_num - 1 >= 0)
         {
             if (mozaic[row_num - 1][i] != nullptr)
@@ -209,7 +198,7 @@ bool Mozaic::returnCheck(int row_num, int i, int a)
     }
     else if (a == 4)
     {
-        if (i + 1 <= 5)
+        if (i + 1 <= 5) 
         {
             //CHECKS RIGHT
             if (mozaic[row_num][i + 1] != nullptr)
