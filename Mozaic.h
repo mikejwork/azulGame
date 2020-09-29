@@ -14,23 +14,25 @@ public:
     Mozaic();
     ~Mozaic();
 
-    Tile *mozaic[5][5];
+    Tile* mozaic[5][5];
+    std::vector<Row*> rows;
+    std::vector<Tile*> broken;
+
+    void print_mozaic();
+
+    void add_tiles(int amount, int row, Tile* tile);
+
+    // BRADEN
     char mask[5][5] = {{'B', 'Y', 'R', 'U', 'L'},
                        {'L', 'B', 'Y', 'R', 'U'},
                        {'U', 'L', 'B', 'Y', 'R'},
                        {'R', 'U', 'L', 'B', 'Y'},
                        {'Y', 'R', 'U', 'L', 'B'}};
-
-    std::vector<Row *> rows;
-    std::vector<Tile *> broken;
-
-    void print_mozaic();
-
     void update_mozaic();
-
-    void add_tiles(int amount, int row, Tile *tile);
-
+    void update_points(int row_num, int i);
 private:
+    int count(int row_num, int i);
+    bool returnCheck(int row_num, int i, int a);
 };
 
 #endif // MOZAIC_H

@@ -141,7 +141,7 @@ void Game_manager::process_rounds() // All we have to do for loading save file i
 
             process_turn();
             get_next_player()->get_mozaic()->update_mozaic();
-
+            
             cycle_players();
         }
     }
