@@ -2,7 +2,7 @@
 #define MENU_H
 #include <iostream>
 
-#include "game_manager.h"
+#include "Game_manager.h"
 
 class Menu {
 public:

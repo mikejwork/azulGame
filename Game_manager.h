@@ -1,10 +1,14 @@
 #ifndef GAME_MANAGER_H
 #define GAME_MANAGER_H
-#include "player.h"
-#include "factory.h"
-#include "tilebag.h"
+
+#include "Player.h"
+#include "Factory.h"
+#include "TileBag.h"
+#include "Turn.h"
+
 #include <vector>
 #include <iostream>
+#include <string>
 
 class Game_manager
 {
@@ -14,6 +18,10 @@ public:
 
     Player* get_next_player();
     void cycle_players();
+
+    bool factoriesEmpty ();
+    int turn(Turn * turn);
+    std::string print_factories();
 
 private:
     // Player related-----------------
@@ -26,7 +34,6 @@ private:
 
     // Factory related-----------------
     void setup_factories();
-    void print_factories();
     bool check_if_empty();
     std::vector<Factory*> factories;
     void leftovers_to_centre(char colour, int factory);
@@ -37,7 +44,6 @@ private:
     // Round related-------------------
     void process_rounds();
     bool process_turn();
-    bool turn(int factory, char colour, int row);
     bool first_tile_taken;
 };
 

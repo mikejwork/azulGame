@@ -8,10 +8,12 @@
 #define LEFT 3
 #define RIGHT 4
 
-#include "tile.h"
-#include "row.h"
+#include "Tile.h"
+#include "Row.h"
+
 #include <vector>
 #include <iostream>
+#include <string>
 
 class Mozaic
 {
@@ -23,7 +25,7 @@ public:
     std::vector<Row*> rows;
     std::vector<Tile*> broken;
 
-    void print_mozaic();
+    std::string print_mozaic();
 
     void add_tiles(int amount, int row, Tile* tile);
 

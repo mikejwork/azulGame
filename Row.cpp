@@ -1,6 +1,6 @@
-#include "row.h"
+#include "Row.h"
 
-Row::Row() 
+Row::Row()
 {
     size = 0;
 }

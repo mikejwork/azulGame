@@ -1,4 +1,4 @@
-#include "tilebag.h"
+#include "TileBag.h"
 
 Node::Node(Tile* tile, Node* next) :
    tile(tile),
@@ -9,22 +9,22 @@ TileBag::TileBag() {
    size = 0;
 }
 
-TileBag::~TileBag() 
+TileBag::~TileBag()
 {
    // TODO
 }
 
-int TileBag::get_size() 
+int TileBag::get_size()
 {
    return this->size;
 }
 
-Tile* TileBag::get(int index) 
+Tile* TileBag::get(int index)
 {
    int count = 0;
    Node* current = head;
    Tile* tile = nullptr;
-   if (index >= 0 && index < size) 
+   if (index >= 0 && index < size)
    {
        while (count < index) {
             ++count;
@@ -44,7 +44,7 @@ void TileBag::add_back(Tile* tile) {
       Node* current = head;
       while (current->next != nullptr) {
          current = current->next;
-      }  
+      }
       current->next = toAdd;
    }
    size++;
@@ -59,10 +59,10 @@ void TileBag::remove_front() {
    size--;
 }
 
-void TileBag::toString() 
+void TileBag::toString()
 {
    Node* current = head;
-   while (current != nullptr) 
+   while (current != nullptr)
    {
       std::cout << current->tile->get_colour();
        current = current->next;

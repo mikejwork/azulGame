@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "mozaic.h"
+#include "Mozaic.h"
 class Player
 {
 public:

@@ -1,4 +1,5 @@
-#include "factory.h"
+#include "Factory.h"
+
 #define MAX_TILES 4
 
 Factory::Factory(int factory_number) :
@@ -24,7 +25,7 @@ void Factory::clear()
     empty = true;
 }
 
-int Factory::get_amount(char colour) 
+int Factory::get_amount(char colour)
 {
     int count = 0;
     for (std::string::size_type i = 0; i < tiles.size(); i++)

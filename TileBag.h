@@ -1,6 +1,8 @@
 #ifndef TILEBAG_H
 #define TILEBAG_H
-#include "tile.h"
+
+#include "Tile.h"
+
 #include <iostream>
 
 class Node {
@@ -21,7 +23,7 @@ public:
    void add_back(Tile* tile);
    void remove_front();
 
-   
+
    void toString();
 
 private:

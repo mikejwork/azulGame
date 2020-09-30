@@ -1,4 +1,4 @@
-#include "mozaic.h"
+#include "Mozaic.h"
 
 Mozaic::Mozaic()
 {
@@ -13,54 +13,60 @@ Mozaic::Mozaic()
 Mozaic::~Mozaic()
 {}
 
-void Mozaic::print_mozaic()
+std::string Mozaic::print_mozaic()
 {
+    std::string returnValue = "";
+
     int row_num = 1;
     int blank_space = 4;
     for (int row = 1; row < 6; row++)
     {
-        std::cout << row << ":";
+        returnValue += row + ":";
         for (int spacing = 0; spacing < blank_space; spacing++)
         {
-            std::cout << "  ";
+            returnValue += "  ";
         }
 
         int empty = row_num - rows[row_num-1]->get_size();
-        for (int index = 0; index < empty; index++) 
+        for (int index = 0; index < empty; index++)
         {
-            std::cout << " .";
+            returnValue += " .";
         }
 
-        for (int index = 0; index < rows[row_num-1]->get_size(); index++) 
+        for (int index = 0; index < rows[row_num-1]->get_size(); index++)
         {
-            std::cout << " " << rows[row_num-1]->get_index(index)->get_colour();
+            char colour = rows[row_num-1]->get_index(index)->get_colour();
+            returnValue += " " + colour;
         }
         blank_space--;
         row_num++;
 
-        std::cout << " ||" ;
-        for (int i = 0; i < 5; i++) 
+        returnValue += " ||" ;
+        for (int i = 0; i < 5; i++)
         {
-            if (mozaic[row - 1][i] == nullptr) 
+            if (mozaic[row - 1][i] == nullptr)
             {
-                std::cout << " ." ;
-            } 
-            else 
-            { 
-                std::cout << " " << mozaic[row - 1][i]->get_colour();
+                returnValue += " ." ;
+            }
+            else
+            {
+                char colour = mozaic[row - 1][i]->get_colour();
+                returnValue += " " + colour;
             }
 
         }
 
-        std::cout << "\n";
+        returnValue += '\n';
     }
 
-    std::cout << "broken: ";
+    returnValue += "broken: ";
 
     for (std::string::size_type i = 0; i < broken.size(); i++) {
-        std::cout << broken[i]->get_colour() << " ";
+        returnValue += broken[i]->get_colour() + " ";
     }
-    std::cout << "\n";
+    returnValue += '\n';
+
+    return returnValue;
 }
 
 
@@ -140,7 +146,7 @@ int Mozaic::count(int row_num, int col)
     }
     once = true;
 
-    while (!returnCheck(f, col, TOP)) 
+    while (!returnCheck(f, col, TOP))
     {
         if (once == true) {
             countTop = 1;
@@ -154,7 +160,6 @@ int Mozaic::count(int row_num, int col)
         result = countRight + countLeft + countTop + countBot;
     }
 
-    std::cout << "PLAYER SCORE: " << result << std::endl;
     return result;
 }
 
@@ -180,7 +185,7 @@ bool Mozaic::returnCheck(int row_num, int i, int a)
         {
             if (mozaic[row_num - 1][i] != nullptr)
             {
- 
+
                 ans = false;
             }
         }
@@ -198,7 +203,7 @@ bool Mozaic::returnCheck(int row_num, int i, int a)
     }
     else if (a == 4)
     {
-        if (i + 1 <= 5) 
+        if (i + 1 <= 5)
         {
             //CHECKS RIGHT
             if (mozaic[row_num][i + 1] != nullptr)
@@ -235,5 +240,5 @@ void Mozaic::add_tiles(int amount, int row, Tile* tile)
             rows[row - 1]->add(new Tile(*tile));
         }
     }
-    
+
 }

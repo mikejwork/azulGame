@@ -1,6 +1,8 @@
 #ifndef FACTORY_H
 #define FACTORY_H
-#include "tile.h"
+
+#include "Tile.h"
+
 #include <vector>
 #include <string>
 
@@ -24,6 +26,6 @@ public:
 
 private:
     int factory_number;
-};  
+};
 
 #endif // FACTORY_H

@@ -1,7 +1,9 @@
 #ifndef ROW_H
 #define ROW_H
+
 #include <vector>
-#include "tile.h"
+
+#include "Tile.h"
 
 class Row
 {
