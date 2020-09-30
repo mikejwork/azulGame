@@ -19,7 +19,6 @@ void Mozaic::print_mozaic()
     int blank_space = 4;
     for (int row = 1; row < 6; row++)
     {
-        std::cout << row << ":";
         for (int spacing = 0; spacing < blank_space; spacing++)
         {
             std::cout << "  ";
@@ -78,6 +77,9 @@ void Mozaic::update_mozaic()
                 {
                     mozaic[row_num - 1][i] = new Tile(rows[row_num - 1]->get_index(row)->get_colour());
                     player_points = count(row_num - 1, i);
+                    player_points -= broken_tiles_score(); //This removes from player total score
+                    std::cout << "Broken score: " << broken_tiles_score() << std::endl; // TO BE REMOVED - JUST USED TO PROVE THAT IT WORKS
+
                 }
             }
             rows[row_num - 1]->clear_row();
@@ -85,12 +87,11 @@ void Mozaic::update_mozaic()
         row_num++;
     }
 }
+
 int Mozaic::get_player_points() {
     int temp = this->player_points;
-    this->player_points = 0;
     return temp;
 }
-
 
 int Mozaic::count(int row_num, int col)
 {
@@ -236,4 +237,22 @@ void Mozaic::add_tiles(int amount, int row, Tile* tile)
         }
     }
     
+}
+
+int Mozaic::broken_tiles_score() {
+    int size = broken.size();
+    int count = 0;
+    for (std::string::size_type i = 0; i < broken.size(); i++) {
+        if (i >= 0 && i < 2) { //There are a total of 7 spots on the broken board, each part adds certain amount
+            count += 1;
+        }
+        if (i >= 2 && i < 5) {
+            count += 2;
+        }
+        if (i >= 5 && i < 7) {
+            count += 3;
+        }
+    }
+    return count;
+
 }

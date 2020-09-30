@@ -140,9 +140,12 @@ void Game_manager::process_rounds() // All we have to do for loading save file i
             get_next_player()->get_mozaic()->print_mozaic();
 
             process_turn();
+
             get_next_player()->get_mozaic()->update_mozaic(); //NEED TO MOVE TO END OF ROUND
             get_next_player()->add_points(get_next_player()->get_mozaic()->get_player_points()); //NEED TO MOVE TO END OF ROUND
             std::cout << "PLAYER POINTS: " << get_next_player()->get_points() << std::endl; //NEED TO REMOVE OR PLACE SOMEWHERE ELSE
+
+            
             cycle_players();
         }
     }
