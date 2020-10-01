@@ -13,60 +13,65 @@ Mozaic::Mozaic()
 Mozaic::~Mozaic()
 {}
 
-std::string Mozaic::print_mozaic()
+std::ostream & operator<< (std::ostream & stream, Mozaic & m)
 {
-    std::string returnValue = "";
-
     int row_num = 1;
     int blank_space = 4;
+
+    std::vector<Row*> & rows = m.rows;
+    std::vector<Tile*> & broken = m.broken;
+    Tile * (& mozaic)[MOZAIC_HEIGHT][MOZAIC_WIDTH] = m.mozaic;
+
+
     for (int row = 1; row < 6; row++)
     {
-        returnValue += row + ":";
+        stream << row << ":";
         for (int spacing = 0; spacing < blank_space; spacing++)
         {
-            returnValue += "  ";
+            stream << "  ";
         }
 
         int empty = row_num - rows[row_num-1]->get_size();
         for (int index = 0; index < empty; index++)
         {
-            returnValue += " .";
+            stream << " .";
         }
 
         for (int index = 0; index < rows[row_num-1]->get_size(); index++)
         {
             char colour = rows[row_num-1]->get_index(index)->get_colour();
-            returnValue += " " + colour;
+            stream << " " << colour;
         }
         blank_space--;
         row_num++;
 
-        returnValue += " ||" ;
+        stream << " ||" ;
         for (int i = 0; i < 5; i++)
         {
             if (mozaic[row - 1][i] == nullptr)
             {
-                returnValue += " ." ;
+                stream << " ." ;
             }
             else
             {
                 char colour = mozaic[row - 1][i]->get_colour();
-                returnValue += " " + colour;
+                stream << " " << colour;
             }
 
         }
 
-        returnValue += '\n';
+        stream << std::endl;
     }
 
-    returnValue += "broken: ";
+    stream << "broken: ";
 
     for (std::string::size_type i = 0; i < broken.size(); i++) {
-        returnValue += broken[i]->get_colour() + " ";
+        stream << broken[i]->get_colour() << " ";
     }
-    returnValue += '\n';
 
-    return returnValue;
+    stream << std::endl;
+
+    return stream;
 }
 
 
@@ -241,4 +246,9 @@ void Mozaic::add_tiles(int amount, int row, Tile* tile)
         }
     }
 
+}
+
+void Mozaic::firstTileTaken ()
+{
+    broken.push_back(new Tile('F'));
 }

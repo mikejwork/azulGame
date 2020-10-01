@@ -38,9 +38,12 @@ Tile* TileBag::get(int index)
 void TileBag::add_back(Tile* tile) {
    Node* toAdd = new Node(tile, nullptr);
 
-   if (head == nullptr) {
+   if (head == nullptr)
+   {
       head = toAdd;
-   } else {
+   }
+   else
+   {
       Node* current = head;
       while (current->next != nullptr) {
          current = current->next;
@@ -59,13 +62,16 @@ void TileBag::remove_front() {
    size--;
 }
 
-void TileBag::toString()
+std::string TileBag::toString()
 {
+   std::string str = "";
+
    Node* current = head;
    while (current != nullptr)
    {
-      std::cout << current->tile->get_colour();
+      str += current->tile->get_colour();
        current = current->next;
    }
-   std::cout << "\n";
+
+   return str;
 }

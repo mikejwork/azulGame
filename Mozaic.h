@@ -3,10 +3,14 @@
 
 #define NUM_ROWS 5
 #define MIN_ROWS 0
+
 #define BACK 1
 #define TOP 2
 #define LEFT 3
 #define RIGHT 4
+
+#define MOZAIC_WIDTH 5
+#define MOZAIC_HEIGHT 5
 
 #include "Tile.h"
 #include "Row.h"
@@ -15,33 +19,40 @@
 #include <iostream>
 #include <string>
 
+
+// TODO make members private
 class Mozaic
 {
 public:
     Mozaic();
     ~Mozaic();
 
-    Tile* mozaic[5][5];
-    std::vector<Row*> rows;
-    std::vector<Tile*> broken;
-
-    std::string print_mozaic();
+    friend std::ostream & operator<< (
+        std::ostream & stream,
+        Mozaic & mozaic);
 
     void add_tiles(int amount, int row, Tile* tile);
 
-    // BRADEN
-    char mask[5][5] = {{'B', 'Y', 'R', 'U', 'L'},
-                       {'L', 'B', 'Y', 'R', 'U'},
-                       {'U', 'L', 'B', 'Y', 'R'},
-                       {'R', 'U', 'L', 'B', 'Y'},
-                       {'Y', 'R', 'U', 'L', 'B'}};
     void update_mozaic();
     void update_points(int row_num, int i);
 
     int get_player_points();
 
+    void firstTileTaken ();
 
 private:
+    Tile* mozaic[MOZAIC_HEIGHT][MOZAIC_WIDTH];
+    std::vector<Row*> rows;
+    std::vector<Tile*> broken;
+
+    // BRADEN
+    char mask[MOZAIC_HEIGHT][MOZAIC_WIDTH]
+        =   {{'B', 'Y', 'R', 'U', 'L'},
+             {'L', 'B', 'Y', 'R', 'U'},
+             {'U', 'L', 'B', 'Y', 'R'},
+             {'R', 'U', 'L', 'B', 'Y'},
+             {'Y', 'R', 'U', 'L', 'B'}};
+
     int count(int row_num, int i);
     int player_points;
     bool returnCheck(int row_num, int i, int a);

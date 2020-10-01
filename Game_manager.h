@@ -21,7 +21,7 @@ public:
 
     bool factoriesEmpty ();
     int turn(Turn * turn);
-    std::string print_factories();
+    void print_factories(std::ostream & stream);
 
 private:
     // Player related-----------------

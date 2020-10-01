@@ -1,6 +1,15 @@
+// This class handles I/O for the game, and calls methods in Game_manager.
+// The purpose of this class is to easily switch between taing input from stdin
+// and taking input from a save file.
+//
+// Author - Issa Chanzi <s3783615@student.rmit.edu.au>#include "GameIO.h"
+
 #include "GameIO.h"
 
 #include <iostream>
+
+#define IN *in
+#define OUT *out
 
 using std::string;
 
@@ -24,7 +33,7 @@ GameIO::GameIO (
 // A round lasts until all factories are empty.
 void GameIO::doRound ()
 {
-    *out << std::endl <<"=== Start Round === " << std::endl;
+    OUT << std::endl <<"=== Start Round === " << std::endl;
     while (!game->factoriesEmpty ())
     {
         printTurn ();
@@ -35,7 +44,7 @@ void GameIO::doRound ()
         delete turn;
 
         // TODO - NEED TO REMOVE OR PLACE SOMEWHERE ELSE
-        std::cout << "PLAYER POINTS: " << points << std::endl;
+        OUT << "PLAYER POINTS: " << points << std::endl;
     }
 }
 
@@ -44,17 +53,16 @@ void GameIO::printTurn ()
     Player * player = game->get_next_player ();
     string playerName = player->get_name ();
 
-    *out << "Turn for player: " << playerName << std::endl;
+    OUT << "Turn for player: " << playerName << std::endl;
 
     //Print factories
-    string factories = game->print_factories();
-    *out << "Factories: " << std::endl;
-    *out << factories;
+    OUT << "Factories: " << std::endl;
+    game->print_factories(OUT);
 
     //Print mozaic [sic]
-    string mozaic = player->get_mozaic ()->print_mozaic ();
-    *out << "Mozaic for: " << playerName << std::endl;
-    *out << mozaic;
+    Mozaic * mozaic = player->get_mozaic ();
+    OUT << "Mozaic for: " << playerName << std::endl;
+    OUT << *mozaic << std::endl;
 
 }
 
@@ -74,23 +82,23 @@ Turn * GameIO::inputTurn ()
 {
     Turn * turn = nullptr;
 
-    *out << "> ";
+    OUT << "> ";
     string cmd; // command
 
-    *in >> cmd; // get the command string input
+    IN >> cmd; // get the command string input
     if (cmd == "turn")
     {
         int factory;
         int row;
         char colour;
 
-        *in >> factory;
-        *in >> colour;
-        *in >> row;
+        IN >> factory;
+        IN >> colour;
+        IN >> row;
 
         if (colour == 'F')
         {
-            *out << "you cannot move the 'F' tile! \n";
+            OUT << "you cannot move the 'F' tile! \n";
             turn = nullptr;
         }
         else

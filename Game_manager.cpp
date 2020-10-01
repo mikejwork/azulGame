@@ -49,22 +49,18 @@ void Game_manager::setup_factories()
     }
 }
 
-std::string Game_manager::print_factories()
+void Game_manager::print_factories(std::ostream & stream)
 {
-    std::string returnValue = "";
-
     for (std::string::size_type i = 0; i < factories.size(); i++)
     {
-        returnValue += factories[i]->get_number() + ": ";
+        stream << factories[i]->get_number() << ": ";
         for (std::string::size_type e = 0; e < factories[i]->tiles.size(); e++)
         {
-            returnValue += factories[i]->tiles[e]->get_colour() + " ";
+            stream << factories[i]->tiles[e]->get_colour() << " ";
         }
-        returnValue += '\n';
+        stream << std::endl;
     }
-    returnValue += '\n';
-
-    return returnValue;
+    stream << std::endl;
 }
 
 bool Game_manager::check_if_empty()
@@ -135,7 +131,7 @@ int Game_manager::turn(Turn * turn)
     {
         if (!first_tile_taken)
         {
-            mozaic->broken.push_back(new Tile('F'));
+            mozaic->firstTileTaken ();
             factories[factory]->remove_specific('F');
             first_tile_taken = true;
         }

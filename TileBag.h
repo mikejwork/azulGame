@@ -4,6 +4,7 @@
 #include "Tile.h"
 
 #include <iostream>
+#include <string>
 
 class Node {
 public:
@@ -24,7 +25,7 @@ public:
    void remove_front();
 
 
-   void toString();
+   std::string toString();
 
 private:
    int size;
