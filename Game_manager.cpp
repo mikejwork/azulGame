@@ -6,11 +6,18 @@
 
 Game_manager::Game_manager()
 {
+    this->tilebag = new TileBag();
+
     // TODO - move I/O code
     std::cout << "\nStarting a new game \n \n";
     setup_players();
     setup_factories();
     std::cout << "Let's Play! \n";
+}
+
+Game_manager::Game_manager (std::string startingTileBag)
+{
+    this->tilebag = new TileBag (startingTileBag);
 }
 
 Game_manager::~Game_manager()
@@ -24,13 +31,6 @@ Game_manager::~Game_manager()
 
 void Game_manager::setup_factories()
 {
-    // Setup the tile bag
-    tilebag = new TileBag();
-    std::string tiles = "YBBRRRLBULULRYBLBBLYRRUYUYUYUBBRLUBLRYLBLBUBUBRYRLLLRRUBYYBYYLRLRRYBURRLUYYYBUBLRUUBYLLBYYUULURYRUUL"; // Tiles, 20 of each colour, 100 total
-    for (std::string::size_type i = 0; i < tiles.size(); i++) {
-        Tile* new_tile = new Tile(tiles[i]);
-        tilebag->add_back(new_tile);
-    }
 
     //Setup each factory with 4 tiles, taken from the front of the tilebag
 
@@ -116,6 +116,8 @@ void Game_manager::cycle_players()
 // Returns points
 int Game_manager::turn(Turn * turn)
 {
+    turns.push_back (turn);
+
     Player * player = get_next_player ();
     Mozaic * mozaic = player->get_mozaic ();
 
@@ -147,6 +149,11 @@ int Game_manager::turn(Turn * turn)
 
     cycle_players();
 
+    if (factoriesEmpty ())
+    {
+        // TODO end of round
+    }
+
     return player->get_points ();
 }
 
@@ -164,4 +171,21 @@ void Game_manager::leftovers_to_centre(char colour, int factory)
 bool Game_manager::factoriesEmpty ()
 {
     return this->check_if_empty ();
+}
+
+std::ostream & operator<< (std::ostream & stream, Game_manager & game)
+{
+    stream << game.tilebag->getStartingTiles () << std::endl;
+
+    for (int i = 0; i < (int) game.players.size (); i++)
+    {
+        stream << game.players[i]->get_name() << std::endl;
+    }
+
+    for (int i = 0; i < (int) game.turns.size (); i++)
+    {
+        stream << game.turns[i] << std::endl;
+    }
+
+    return stream;
 }

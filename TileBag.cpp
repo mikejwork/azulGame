@@ -1,5 +1,7 @@
 #include "TileBag.h"
 
+#define DEFAULT_TILES "YBBRRRLBULULRYBLBBLYRRUYUYUYUBBRLUBLRYLBLBUBUBRYRLLLRRUBYYBYYLRLRRYBURRLUYYYBUBLRUUBYLLBYYUULURYRUUL"
+
 Node::Node(Tile* tile, Node* next) :
    tile(tile),
    next(next)
@@ -7,11 +9,27 @@ Node::Node(Tile* tile, Node* next) :
 
 TileBag::TileBag() {
    size = 0;
+   this->startingTiles = DEFAULT_TILES;
+   loadTiles (startingTiles);
+}
+
+TileBag::TileBag(std::string startingTiles) {
+   size = 0;
+   this->startingTiles = startingTiles;
+   loadTiles (startingTiles);
 }
 
 TileBag::~TileBag()
 {
-   // TODO
+   // TODO - memory leak here
+}
+
+void TileBag::loadTiles (std::string tiles)
+{
+    for (std::string::size_type i = 0; i < tiles.size(); i++) {
+        Tile* new_tile = new Tile(tiles[i]);
+        add_back(new_tile);
+    }
 }
 
 int TileBag::get_size()
@@ -60,6 +78,11 @@ void TileBag::remove_front() {
       delete temp;
    }
    size--;
+}
+
+std::string TileBag::getStartingTiles ()
+{
+    return this->startingTiles;
 }
 
 std::string TileBag::toString()

@@ -13,8 +13,9 @@
 class Game_manager
 {
 public:
-    Game_manager();
-    ~Game_manager();
+    Game_manager ();
+    Game_manager (std::string startingTileBag);
+    ~Game_manager ();
 
     Player* get_next_player();
     void cycle_players();
@@ -23,11 +24,13 @@ public:
     int turn(Turn * turn);
     void print_factories(std::ostream & stream);
 
+    friend std::ostream & operator<< (
+        std::ostream & stream,
+        Game_manager & game);
+
 private:
     // Player related-----------------
     int player_turn;
-    Player* player_one;
-    Player* player_two;
     std::vector<Player*> players;
     void setup_players();
     void add_player(Player* player);
@@ -45,6 +48,8 @@ private:
     void process_rounds();
     bool process_turn();
     bool first_tile_taken;
+
+    std::vector <Turn *> turns;
 };
 
 
