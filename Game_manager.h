@@ -17,8 +17,10 @@ public:
     Game_manager (std::string startingTileBag);
     ~Game_manager ();
 
+    void add_player(Player* player);
     Player* get_next_player();
     void cycle_players();
+    int numPlayers ();
 
     bool factoriesEmpty ();
     int turn(Turn * turn);
@@ -33,7 +35,6 @@ private:
     int player_turn;
     std::vector<Player*> players;
     void setup_players();
-    void add_player(Player* player);
 
     // Factory related-----------------
     void setup_factories();

@@ -18,13 +18,16 @@ Game_manager::Game_manager()
 Game_manager::Game_manager (std::string startingTileBag)
 {
     this->tilebag = new TileBag (startingTileBag);
+    setup_factories();
 }
 
 Game_manager::~Game_manager()
 {
     // change into destructors
-    players.clear();
-    factories.clear();
+    players.clear ();
+    factories.clear ();
+    turns.clear ();
+    delete tilebag;
 }
 
 // Factory related methods
@@ -79,6 +82,11 @@ bool Game_manager::check_if_empty()
 }
 
 // Player related methods
+
+int Game_manager::numPlayers ()
+{
+    return (int) this->players.size ();
+}
 
 void Game_manager::setup_players()
 {

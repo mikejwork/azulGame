@@ -7,22 +7,50 @@
 #include "GameIO.h"
 
 #include <iostream>
+#include <cctype>
 
-#define IN *in
-#define OUT *out
+#define IN (*in)
+#define OUT (*out)
+
+#define PROMPT "> "
 
 using std::string;
 
-std::ostream * GameIO::devNull = new std::ostream (nullptr);
+class NullBuf : public std::streambuf
+{
+public:
+    int overflow(int ch)
+    {
+        return ch;
+    }
+    std::streamsize sputn( const char_type* s, std::streamsize count )
+    {
+       return count;
+    }
+    static NullBuf instance;
+};
+
+NullBuf NullBuf::instance;
+std::ostream * GameIO::devNull = new std::ostream (&NullBuf::instance);
+
+bool GameIO::moreInput ()
+{
+    while (std::isspace (IN.peek ()))
+    {
+        IN.get ();
+    }
+
+    return !IN.eof ();
+}
 
 GameIO::GameIO (
     Game_manager * game,
-    std::istream & in,
-    std::ostream & out)
+    std::istream * in,
+    std::ostream * out)
 {
     this->game = game;
-    this->in = &in;
-    this->out = &out;
+    this->in = in;
+    this->out = out;
 
     if (this->out == nullptr)
     {
@@ -36,16 +64,18 @@ void GameIO::doRound ()
     OUT << std::endl <<"=== Start Round === " << std::endl;
     while (!game->factoriesEmpty ())
     {
-        printTurn ();
-        Turn * turn = getTurn ();
-        int points = game->turn (turn);
-
-        // TODO store turn
-        delete turn;
-
-        // TODO - NEED TO REMOVE OR PLACE SOMEWHERE ELSE
-        OUT << "PLAYER POINTS: " << points << std::endl;
+        doTurn ();
     }
+}
+
+void GameIO::doTurn ()
+{
+    printTurn ();
+    Turn * turn = getTurn ();
+    int points = game->turn (turn);
+
+    // TODO - NEED TO REMOVE OR PLACE SOMEWHERE ELSE
+    OUT << "PLAYER POINTS: " << points << std::endl;
 }
 
 void GameIO::printTurn ()
@@ -82,7 +112,7 @@ Turn * GameIO::inputTurn ()
 {
     Turn * turn = nullptr;
 
-    OUT << "> ";
+    OUT << PROMPT;
     string cmd; // command
 
     IN >> cmd; // get the command string input
@@ -106,6 +136,55 @@ Turn * GameIO::inputTurn ()
             turn = new Turn (factory, row, colour);
         }
     }
+    else
+    {
+        OUT << "Invalid command. Correct format is "
+            << "'turn <factory> <colour> <row>'." << std::endl;
+    }
 
     return turn;
+}
+
+void GameIO::addPlayer ()
+{
+    std::string name;
+    int playerNum = game->numPlayers () + 1;
+
+    OUT << "Enter a name for player " << playerNum << std::endl << PROMPT;
+    IN >> name;
+    OUT << std::endl;
+
+    game->add_player(new Player(name));
+}
+
+void GameIO::addPlayer (int numPlayers)
+{
+    for (int i = 0; i < numPlayers; i++)
+    {
+        addPlayer ();
+    }
+}
+
+Game_manager * GameIO::loadGame ()
+{
+    int numPlayers = 2;
+
+    delete this->game;
+
+    // Load starting tile bag
+    std::string startingTileBag;
+    IN >> startingTileBag;
+
+    this->game = new Game_manager (startingTileBag);
+
+    // Load players
+    addPlayer (numPlayers);
+
+    // Load turns
+    while (moreInput ())
+    {
+        doTurn();
+    }
+
+    return this->game;
 }

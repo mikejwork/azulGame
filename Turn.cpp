@@ -1,7 +1,7 @@
-#include "Turn.h"
-
 // This class represents the input information for a turn.
 // It's meant for data storage, not to have extra functionality added.
+
+#include "Turn.h"
 
 Turn::Turn (
     int factory,
@@ -28,12 +28,12 @@ int Turn::colour ()
     return this->_colour;
 }
 
-std::string Turn::toString ()
+std::ostream & operator<< (std::ostream & stream, Turn * turn)
 {
-    std::string str = "turn ";
-    str += _factory + " ";
-    str += _row + " ";
-    str += _colour + "\n";
+    stream << "turn ";
+    stream << turn->_factory << " ";
+    stream << turn->_colour << " ";
+    stream << turn->_row;
 
-    return str;
+    return stream;
 }

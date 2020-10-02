@@ -2,6 +2,7 @@
 #define TURN_H
 
 #include <string>
+#include <iostream>
 
 // This class represents the input information for a turn.
 // It's meant for data storage, not to have extra functionality added.
@@ -18,12 +19,12 @@ public:
     int row ();
     int colour ();
 
-    std::string toString ();
+    friend std::ostream & operator<< (std::ostream & stream, Turn * turn);
 
 private:
     int _factory;
     int _row;
-    int _colour;
+    char _colour;
 };
 
 

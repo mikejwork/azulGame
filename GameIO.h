@@ -16,9 +16,17 @@ class GameIO
     public:
         GameIO (
             Game_manager * game,
-            std::istream & in,
-            std::ostream & out);
+            std::istream * in,
+            std::ostream * out);
+
+        // TODO delete this method
         void doRound ();
+
+        void doTurn ();
+
+        void addPlayer ();
+        void addPlayer (int numPlayers);
+        Game_manager * loadGame ();
 
     private:
         Game_manager * game;
@@ -28,6 +36,8 @@ class GameIO
         void printTurn ();
         Turn * getTurn ();
         Turn * inputTurn ();
+
+        bool moreInput ();
 
         static std::ostream * devNull;
 };

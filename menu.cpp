@@ -47,7 +47,7 @@ void Menu::input_logic(int input)
     if (input == NEW_GAME)
     {
         game_manager = new Game_manager();
-        GameIO * io = new GameIO (game_manager, std::cin, std::cout);
+        GameIO * io = new GameIO (game_manager, &std::cin, &std::cout);
         for (int i = 0; i < NUM_ROUNDS; i++)
         {
             io->doRound ();
