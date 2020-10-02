@@ -42,7 +42,7 @@ void GameIO::doRound ()
 
         // TODO store turn
         delete turn;
-
+        print_final(); //USED TO TEST OUT IF THE SCORING SYSTEM WORKS - IT DOES
         // TODO - NEED TO REMOVE OR PLACE SOMEWHERE ELSE
         OUT << "PLAYER POINTS: " << points << std::endl;
     }
@@ -101,6 +101,10 @@ Turn * GameIO::inputTurn ()
             OUT << "you cannot move the 'F' tile! \n";
             turn = nullptr;
         }
+        if(game->get_next_player()->get_mozaic()->check_line(colour, row)) { //can be replaced by checkColour();
+            OUT << "Cannot place tile there! \n";
+            turn=nullptr;
+        }
         else
         {
             turn = new Turn (factory, row, colour);
@@ -109,3 +113,27 @@ Turn * GameIO::inputTurn ()
 
     return turn;
 }
+
+
+void GameIO::print_final() { //RECENTLY ADDED - PROBLEM: SOMETIMES PRINTS PLAYER 2 FIRST INSTEAD OF PLAYER 1, DUE TO ROTATION
+    OUT << "=== GAME OVER ===\n\n";
+    OUT << "Final Scores: \n";
+    OUT << "Player " << game->get_next_player()->get_name() << ": "<< game->get_next_player()->get_points() <<std::endl;
+    game->cycle_players();
+    OUT << "Player " << game->get_next_player()->get_name() << ": " << game->get_next_player()->get_points() <<std::endl;
+    game->cycle_players(); //need to remove, this is just for testing 
+    OUT << "Player " << game->return_winner_name() << " wins! \n" <<std::endl;
+}
+
+
+
+// bool GameIO::checkColour(char colour, int row)
+// {
+//     bool result= false;
+//     if(game->get_next_player()->get_mozaic()->check_line(colour, row))
+//     {
+//         result=true;
+//     }
+//     return result;
+
+// }

@@ -15,9 +15,9 @@ Game_manager::Game_manager()
     std::cout << "Let's Play! \n";
 }
 
-Game_manager::Game_manager (std::string startingTileBag)
+Game_manager::Game_manager(std::string startingTileBag)
 {
-    this->tilebag = new TileBag (startingTileBag);
+    this->tilebag = new TileBag(startingTileBag);
 }
 
 Game_manager::~Game_manager()
@@ -49,7 +49,7 @@ void Game_manager::setup_factories()
     }
 }
 
-void Game_manager::print_factories(std::ostream & stream)
+void Game_manager::print_factories(std::ostream &stream)
 {
     for (std::string::size_type i = 0; i < factories.size(); i++)
     {
@@ -71,7 +71,7 @@ bool Game_manager::check_if_empty()
     {
         if (factories[i]->tiles.size() != 0)
         {
-           empty = false;
+            empty = false;
         }
     }
 
@@ -85,21 +85,21 @@ void Game_manager::setup_players()
     for (int i = 1; i <= NUM_PLAYERS; i++)
     {
         std::string player_name;
-        std::cout << "Enter a name for player " << i << std::endl << "> ";
+        std::cout << "Enter a name for player " << i << std::endl
+                  << "> ";
         std::cin >> player_name;
         std::cout << "\n";
 
         add_player(new Player(player_name));
-
     }
 }
 
-void Game_manager::add_player(Player* player)
+void Game_manager::add_player(Player *player)
 {
     players.push_back(player);
 }
 
-Player* Game_manager::get_next_player()
+Player *Game_manager::get_next_player()
 {
     return players[player_turn];
 }
@@ -114,16 +114,16 @@ void Game_manager::cycle_players()
 }
 
 // Returns points
-int Game_manager::turn(Turn * turn)
+int Game_manager::turn(Turn *turn)
 {
-    turns.push_back (turn);
+    turns.push_back(turn);
 
-    Player * player = get_next_player ();
-    Mozaic * mozaic = player->get_mozaic ();
+    Player *player = get_next_player();
+    Mozaic *mozaic = player->get_mozaic();
 
-    int factory = turn->factory ();
-    int row = turn->row ();
-    int colour = turn->colour ();
+    int factory = turn->factory();
+    int row = turn->row();
+    int colour = turn->colour();
 
     // get the amount of the chosen colour in the factory
     int amount = factories[factory]->get_amount(colour);
@@ -133,12 +133,14 @@ int Game_manager::turn(Turn * turn)
     {
         if (!first_tile_taken)
         {
-            mozaic->firstTileTaken ();
+            mozaic->firstTileTaken();
             factories[factory]->remove_specific('F');
             first_tile_taken = true;
         }
         factories[factory]->remove_specific(colour);
-    } else {
+    }
+    else
+    {
         leftovers_to_centre(colour, factory);
         factories[factory]->clear();
     }
@@ -146,15 +148,16 @@ int Game_manager::turn(Turn * turn)
     // TODO - NEED TO MOVE TO END OF ROUND
     mozaic->update_mozaic();
     player->add_points(mozaic->get_player_points());
+    mozaic->return_broken(tilebag);
 
     cycle_players();
 
-    if (factoriesEmpty ())
+    if (factoriesEmpty())
     {
         // TODO end of round
     }
 
-    return player->get_points ();
+    return player->get_points();
 }
 
 void Game_manager::leftovers_to_centre(char colour, int factory)
@@ -168,24 +171,39 @@ void Game_manager::leftovers_to_centre(char colour, int factory)
     }
 }
 
-bool Game_manager::factoriesEmpty ()
+bool Game_manager::factoriesEmpty()
 {
-    return this->check_if_empty ();
+    return this->check_if_empty();
 }
 
-std::ostream & operator<< (std::ostream & stream, Game_manager & game)
+std::ostream &operator<<(std::ostream &stream, Game_manager &game)
 {
-    stream << game.tilebag->getStartingTiles () << std::endl;
+    stream << game.tilebag->getStartingTiles() << std::endl;
 
-    for (int i = 0; i < (int) game.players.size (); i++)
+    for (int i = 0; i < (int)game.players.size(); i++)
     {
         stream << game.players[i]->get_name() << std::endl;
     }
 
-    for (int i = 0; i < (int) game.turns.size (); i++)
+    for (int i = 0; i < (int)game.turns.size(); i++)
     {
         stream << game.turns[i] << std::endl;
     }
 
     return stream;
+}
+
+std::string Game_manager::return_winner_name() //THIS IS USED TO PRINT THE FINAL SCORES
+{
+    std::string winner = get_next_player()->get_name();
+    for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement? 
+    {
+        Player* temp = get_next_player();
+        cycle_players();
+        if (temp->get_points() >get_next_player()->get_points() ) {
+            winner = temp->get_name();
+        }
+    }
+    //delete temp; //need to delete temp
+    return winner;
 }

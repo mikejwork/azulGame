@@ -28,6 +28,12 @@ class GameIO
         void printTurn ();
         Turn * getTurn ();
         Turn * inputTurn ();
+        
+        //TEMPORARY
+        bool checkColour(char colour, int row);
+
+
+        void print_final();
 
         static std::ostream * devNull;
 };

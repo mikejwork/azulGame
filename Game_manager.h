@@ -28,6 +28,10 @@ public:
         std::ostream & stream,
         Game_manager & game);
 
+
+  //BRaden IMplementation - Remove this IF NEEDED
+    std::string return_winner_name();
+    
 private:
     // Player related-----------------
     int player_turn;
@@ -50,6 +54,10 @@ private:
     bool first_tile_taken;
 
     std::vector <Turn *> turns;
+
+  
+
+
 };
 
 
