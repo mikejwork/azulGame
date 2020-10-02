@@ -10,18 +10,13 @@
 int main ()
 {
 
-    std::ifstream in;
-    std::ofstream out;
-
-    std::ofstream null;
-
-    in.open (IN_FILENAME);
-    out.open (OUT_FILENAME);
-
+    // To load a game
+    std::ifstream in (IN_FILENAME);
     GameIO * io = new GameIO (nullptr, &in, nullptr);
-
     Game_manager * game = io->loadGame ();
 
+    // To save a game
+    std::ofstream out (OUT_FILENAME);
     out << *game;
 
     delete io;
