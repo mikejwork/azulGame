@@ -8,6 +8,8 @@
 #define GAME_IO_H
 
 #include <iostream>
+#include <fstream>
+#include <string>
 
 #include "Game_manager.h"
 
@@ -26,12 +28,18 @@ class GameIO
 
         void addPlayer ();
         void addPlayer (int numPlayers);
+
         Game_manager * loadGame ();
+        void saveGame (std::string filename);
 
     private:
         Game_manager * game;
         std::istream * in;
         std::ostream * out;
+
+        std::string doCmd ();
+        void turnCmd ();
+        void saveCmd ();
 
         void printTurn ();
         Turn * getTurn ();

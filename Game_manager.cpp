@@ -192,7 +192,7 @@ std::ostream & operator<< (std::ostream & stream, Game_manager & game)
 
     for (int i = 0; i < (int) game.turns.size (); i++)
     {
-        stream << game.turns[i] << std::endl;
+        stream << "turn " << game.turns[i] << std::endl;
     }
 
     return stream;

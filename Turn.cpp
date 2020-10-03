@@ -30,7 +30,6 @@ int Turn::colour ()
 
 std::ostream & operator<< (std::ostream & stream, Turn * turn)
 {
-    stream << "turn ";
     stream << turn->_factory << " ";
     stream << turn->_colour << " ";
     stream << turn->_row;

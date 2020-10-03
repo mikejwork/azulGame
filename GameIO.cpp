@@ -68,14 +68,49 @@ void GameIO::doRound ()
     }
 }
 
+std::string GameIO::doCmd ()
+{
+    OUT << PROMPT;
+    
+    std::string cmd;
+    IN >> cmd;
+
+    if (cmd == "turn")
+    {
+        turnCmd ();
+    }
+    else if (cmd == "save")
+    {
+        saveCmd ();
+    }
+    else if (IN.eof ())
+    {
+        OUT << "Have a really awesome day. Goodbye." << std::endl;
+        // TODO are we allowed to use exit()?
+        exit (0);
+    }
+
+    return cmd;
+}
+
+void GameIO::turnCmd ()
+{
+    Turn * turn = getTurn ();
+    game->turn (turn);
+}
+
+void GameIO::saveCmd ()
+{
+    std::string filename;
+    IN >> filename;
+    saveGame (filename);
+}
+
 void GameIO::doTurn ()
 {
     printTurn ();
-    Turn * turn = getTurn ();
-    int points = game->turn (turn);
-
-    // TODO - NEED TO REMOVE OR PLACE SOMEWHERE ELSE
-    OUT << "PLAYER POINTS: " << points << std::endl;
+    while  (doCmd () != "turn")
+    {}
 }
 
 void GameIO::printTurn ()
@@ -112,34 +147,22 @@ Turn * GameIO::inputTurn ()
 {
     Turn * turn = nullptr;
 
-    OUT << PROMPT;
-    string cmd; // command
+    int factory;
+    int row;
+    char colour;
 
-    IN >> cmd; // get the command string input
-    if (cmd == "turn")
+    IN >> factory;
+    IN >> colour;
+    IN >> row;
+
+    if (colour == 'F')
     {
-        int factory;
-        int row;
-        char colour;
-
-        IN >> factory;
-        IN >> colour;
-        IN >> row;
-
-        if (colour == 'F')
-        {
-            OUT << "you cannot move the 'F' tile! \n";
-            turn = nullptr;
-        }
-        else
-        {
-            turn = new Turn (factory, row, colour);
-        }
+        OUT << "you cannot move the 'F' tile! \n";
+        turn = nullptr;
     }
     else
     {
-        OUT << "Invalid command. Correct format is "
-            << "'turn <factory> <colour> <row>'." << std::endl;
+        turn = new Turn (factory, row, colour);
     }
 
     return turn;
@@ -187,4 +210,10 @@ Game_manager * GameIO::loadGame ()
     }
 
     return this->game;
+}
+
+void GameIO::saveGame (std::string filename)
+{
+    std::ofstream file (filename);
+    file << *game;
 }
