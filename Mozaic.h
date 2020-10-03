@@ -60,6 +60,8 @@ private:
     int count(int row_num, int i);
     int player_points;
     bool returnCheck(int row_num, int i, int a);
+    int broken_tiles_score();
+
 };
 
 #endif // MOZAIC_H

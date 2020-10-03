@@ -88,6 +88,8 @@ void Mozaic::update_mozaic()
                 {
                     mozaic[row_num - 1][col] = new Tile(rows[row_num - 1]->get_index(row)->get_colour());
                     player_points = count(row_num - 1, col);
+                    player_points -= broken_tiles_score();                              //This removes from player total score
+                    std::cout << "Broken score: " << broken_tiles_score() << std::endl; // TO BE REMOVED - JUST USED TO PROVE THAT IT WORKS
                 }
             }
             rows[row_num - 1]->clear_row();
@@ -268,13 +270,44 @@ bool Mozaic::check_line(char colour, int row) //THIS IS USED SEE IF THERE IS A T
             }
         }
     }
+
+   if(rows[row - 1]->get_size() != 0)
+    {
+        if (colour != rows[row - 1]->get_index(0)->get_colour())
+        {
+            result = true;
+        }
+    }
+
     return result;
 }
 
-void Mozaic::return_broken(TileBag* tilebag) { //THIS NEEDS TO RETURN ALL BROKEN TILES TO END OF TILEBAG
-    for (std::string::size_type i = 0; i < broken.size(); i++) {
+void Mozaic::return_broken(TileBag *tilebag)
+{ //THIS NEEDS TO RETURN ALL BROKEN TILES TO END OF TILEBAG
+    for (std::string::size_type i = 0; i < broken.size(); i++)
+    {
         tilebag->add_back(broken[i]);
     }
-        broken.clear();
+    broken.clear();
+}
 
+int Mozaic::broken_tiles_score()
+{
+    int count = 0;
+    for (std::string::size_type i = 0; i < broken.size(); i++)
+    {
+        if (i >= 0 && i < 2)
+        { //There are a total of 7 spots on the broken board, each part adds certain amount
+            count += 1;
+        }
+        if (i >= 2 && i < 5)
+        {
+            count += 2;
+        }
+        if (i >= 5 && i < 7)
+        {
+            count += 3;
+        }
+    }
+    return count;
 }
