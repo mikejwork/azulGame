@@ -87,7 +87,7 @@ void Mozaic::update_mozaic()
                 if (rows[row_num - 1]->get_index(row)->get_colour() == mask[row][col])
                 {
                     mozaic[row_num - 1][col] = new Tile(rows[row_num - 1]->get_index(row)->get_colour());
-                    player_points = count(row_num - 1, col);
+                    player_points += count(row_num - 1, col);
                 }
             }
             rows[row_num - 1]->clear_row();

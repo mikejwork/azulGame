@@ -198,6 +198,21 @@ std::ostream & operator<< (std::ostream & stream, Game_manager & game)
     return stream;
 }
 
+void Game_manager::finish_update() {
+
+    for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement?
+    {
+        Player *temp = get_next_player();
+        temp->get_mozaic()->update_mozaic();
+        temp->add_points(temp->get_mozaic()->get_player_points());
+        temp->get_mozaic()->return_broken(tilebag);
+        cycle_players();
+    }
+    if (player_turn == 0) //This places player 1 on the top of the Final Score
+       {
+        cycle_players();
+       }
+}
 
 std::string Game_manager::return_winner_name() //THIS IS USED TO PRINT THE FINAL SCORES
 {
