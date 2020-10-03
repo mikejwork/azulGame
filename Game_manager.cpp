@@ -199,15 +199,21 @@ std::ostream &operator<<(std::ostream &stream, Game_manager &game)
 
 std::string Game_manager::return_winner_name() //THIS IS USED TO PRINT THE FINAL SCORES
 {
-    std::string winner = get_next_player()->get_name();
-    for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement? 
+    std::string returnString = "Player " + get_next_player()->get_name() + "wins!\n";
+    ;
+    for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement?
     {
-        Player* temp = get_next_player();
+        Player *temp = get_next_player();
         cycle_players();
-        if (temp->get_points() >get_next_player()->get_points() ) {
-            winner = temp->get_name();
+        if (temp->get_points() > get_next_player()->get_points())
+        {
+            returnString = "Player " + temp->get_name() + " wins!\n";
+        }
+        if (temp->get_points() == get_next_player()->get_points())
+        {
+            returnString = "It's a draw!\n";
         }
     }
     //delete temp; //need to delete temp
-    return winner;
+    return returnString;
 }
