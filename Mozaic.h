@@ -40,9 +40,7 @@ public:
     void firstTileTaken();
     void update_mozaic();
     bool isRowFull(int row);
-
     int broken_tiles_score();
-    void return_broken(TileBag* tilebag) ;
 
 
 private:
@@ -58,7 +56,6 @@ private:
     bool returnCheck(int row_num, int i, int a);
     int count(int row_num, int i);
     int player_points;
-    
 };
 
 #endif // MOZAIC_H

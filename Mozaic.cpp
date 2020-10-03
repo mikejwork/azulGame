@@ -290,27 +290,6 @@ void Mozaic::return_broken(TileBag* tilebag)
     broken.clear();
 }
 
-int Mozaic::broken_tiles_score()
-{
-    int count = 0;
-    for (std::string::size_type i = 0; i < broken.size(); i++)
-    {
-        if (i >= 0 && i < 2)
-        { //There are a total of 7 spots on the broken board, each part adds certain amount
-            count += 1;
-        }
-        if (i >= 2 && i < 5)
-        {
-            count += 2;
-        }
-        if (i >= 5 && i < 7)
-        {
-            count += 3;
-        }
-    }
-    return count;
-}
-
 bool Mozaic::isRowFull(int row)
 {
     if (rows[row - 1]->get_size() == row)
