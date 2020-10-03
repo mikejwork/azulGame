@@ -128,9 +128,13 @@ int Game_manager::turn(Turn *turn)
     // get the amount of the chosen colour in the factory
     int amount = factories[factory]->get_amount(colour);
 
+    // Add tiles to the mozaic rows
     mozaic->add_tiles(amount, row, new Tile(colour));
+   // If the factory is equal to zero, the whole factory will not be
+   // emptied like it would normally, only the tiles taken will be removed
     if (factory == 0)
-    {
+    {   
+        // First tile condition
         if (!first_tile_taken)
         {
             mozaic->firstTileTaken();
@@ -141,20 +145,20 @@ int Game_manager::turn(Turn *turn)
     }
     else
     {
+        // Moves the leftover tiles in the factory to the centre factory
         leftovers_to_centre(colour, factory);
+        // Clears the factory - standard vector clear
         factories[factory]->clear();
     }
 
-    // TODO - NEED TO MOVE TO END OF ROUND
-    mozaic->update_mozaic();
-    player->add_points(mozaic->get_player_points());
-    mozaic->return_broken(tilebag);
 
     cycle_players();
 
     if (factoriesEmpty())
     {
-        // TODO end of round
+        mozaic->update_mozaic();
+        player->add_points(mozaic->get_player_points());
+        mozaic->return_broken(tilebag);
     }
 
     return player->get_points();

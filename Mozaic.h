@@ -33,33 +33,32 @@ public:
         Mozaic &mozaic);
 
     void add_tiles(int amount, int row, Tile *tile);
-
-    void update_mozaic();
     void update_points(int row_num, int i);
-
-    int get_player_points();
-
-    void firstTileTaken();
-
     bool check_line(char colour, int row);
-
     void return_broken(TileBag *tilebag);
+    int get_player_points();
+    void firstTileTaken();
+    void update_mozaic();
+    bool isRowFull(int row);
+
+    int broken_tiles_score();
+    void return_broken(TileBag* tilebag) ;
+
 
 private:
     Tile *mozaic[MOZAIC_HEIGHT][MOZAIC_WIDTH];
     std::vector<Row *> rows;
     std::vector<Tile *> broken;
 
-    // BRADEN
     char mask[MOZAIC_HEIGHT][MOZAIC_WIDTH] = {{'B', 'Y', 'R', 'U', 'L'},
                                               {'L', 'B', 'Y', 'R', 'U'},
                                               {'U', 'L', 'B', 'Y', 'R'},
                                               {'R', 'U', 'L', 'B', 'Y'},
                                               {'Y', 'R', 'U', 'L', 'B'}};
-
+    bool returnCheck(int row_num, int i, int a);
     int count(int row_num, int i);
     int player_points;
-    bool returnCheck(int row_num, int i, int a);
+    
 };
 
 #endif // MOZAIC_H

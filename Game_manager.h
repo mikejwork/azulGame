@@ -29,8 +29,9 @@ public:
         Game_manager & game);
 
 
-  //BRaden IMplementation - Remove this IF NEEDED
+  //Braden Implementation - Remove this IF NEEDED
     std::string return_winner_name();
+    std::vector<Factory*> factories;
     
 private:
     // Player related-----------------
@@ -42,7 +43,6 @@ private:
     // Factory related-----------------
     void setup_factories();
     bool check_if_empty();
-    std::vector<Factory*> factories;
     void leftovers_to_centre(char colour, int factory);
 
     // Tilebag related-----------------

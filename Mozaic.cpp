@@ -268,13 +268,54 @@ bool Mozaic::check_line(char colour, int row) //THIS IS USED SEE IF THERE IS A T
             }
         }
     }
+    if(rows[row - 1]->get_size() != 0)
+    {
+        if (colour != rows[row - 1]->get_index(0)->get_colour())
+        {
+            result = true;
+        }
+    }
     return result;
 }
 
-void Mozaic::return_broken(TileBag* tilebag) { //THIS NEEDS TO RETURN ALL BROKEN TILES TO END OF TILEBAG
-    for (std::string::size_type i = 0; i < broken.size(); i++) {
-        tilebag->add_back(broken[i]);
+void Mozaic::return_broken(TileBag* tilebag) 
+{ //THIS NEEDS TO RETURN ALL BROKEN TILES TO END OF TILEBAG
+    for (std::string::size_type i = 0; i < broken.size(); i++)
+    {
+        if (broken[i]->get_colour() != 'F')
+        {
+            tilebag->add_back(new Tile(*broken[i]));
+        }
     }
-        broken.clear();
+    broken.clear();
+}
 
+int Mozaic::broken_tiles_score()
+{
+    int count = 0;
+    for (std::string::size_type i = 0; i < broken.size(); i++)
+    {
+        if (i >= 0 && i < 2)
+        { //There are a total of 7 spots on the broken board, each part adds certain amount
+            count += 1;
+        }
+        if (i >= 2 && i < 5)
+        {
+            count += 2;
+        }
+        if (i >= 5 && i < 7)
+        {
+            count += 3;
+        }
+    }
+    return count;
+}
+
+bool Mozaic::isRowFull(int row)
+{
+    if (rows[row - 1]->get_size() == row)
+    {
+        return true;
+    }
+    return false;
 }
