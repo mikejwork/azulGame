@@ -278,7 +278,7 @@ bool Mozaic::check_line(char colour, int row) //THIS IS USED SEE IF THERE IS A T
     return result;
 }
 
-void Mozaic::return_broken(TileBag* tilebag) 
+void Mozaic::return_broken(TileBag* tilebag)
 { //THIS NEEDS TO RETURN ALL BROKEN TILES TO END OF TILEBAG
     for (std::string::size_type i = 0; i < broken.size(); i++)
     {

@@ -47,25 +47,48 @@ void Menu::input_logic(int input)
     if (input == NEW_GAME)
     {
         game_manager = new Game_manager();
-        GameIO * io = new GameIO (game_manager, std::cin, std::cout);
-        for (int i = 0; i < NUM_ROUNDS; i++)
-        {
-            io->doRound ();
-        }
+        playGame ();
     }
     else if (input == LOAD_GAME)
     {
-        // Load a game from save file
+        loadGame ();
+        playGame ();
     }
     else if (input == CREDITS)
     {
-        // Display the credits
+        // Dgame_managerisplay the credits
         display_credits();
     }
     else if (input == QUIT)
     {
         // Quit the program
         // + Memory cleanup
+    }
+}
+
+void Menu::loadGame ()
+{
+    std::cout << "Enter file name" << std::endl << "> ";
+
+    std::string filename;
+    std::cin >> filename;
+
+    std::ifstream file (filename);
+    GameIO * io = new GameIO (nullptr, &file, nullptr);
+    game_manager = io->loadGame ();
+    delete io;
+}
+
+void Menu::playGame ()
+{
+    GameIO * io = new GameIO (game_manager, &std::cin, &std::cout);
+
+    // TODO Make game track total number of rounds.
+    // TODO Currently, if a saved game is loaded, the game will play 5 *more*
+    // TODO rounds, instead of until 5 total rounds.
+    for (int i = 0; i < NUM_ROUNDS; i++)
+    {
+        io->doRound ();
     }
 }
 

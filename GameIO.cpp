@@ -7,22 +7,50 @@
 #include "GameIO.h"
 
 #include <iostream>
+#include <cctype>
 
-#define IN *in
-#define OUT *out
+#define IN (*in)
+#define OUT (*out)
+
+#define PROMPT "> "
 
 using std::string;
 
-std::ostream * GameIO::devNull = new std::ostream (nullptr);
+class NullBuf : public std::streambuf
+{
+public:
+    int overflow(int ch)
+    {
+        return ch;
+    }
+    std::streamsize sputn( const char_type* s, std::streamsize count )
+    {
+       return count;
+    }
+    static NullBuf instance;
+};
+
+NullBuf NullBuf::instance;
+std::ostream * GameIO::devNull = new std::ostream (&NullBuf::instance);
+
+bool GameIO::moreInput ()
+{
+    while (std::isspace (IN.peek ()))
+    {
+        IN.get ();
+    }
+
+    return !IN.eof ();
+}
 
 GameIO::GameIO (
     Game_manager * game,
-    std::istream & in,
-    std::ostream & out)
+    std::istream * in,
+    std::ostream * out)
 {
     this->game = game;
-    this->in = &in;
-    this->out = &out;
+    this->in = in;
+    this->out = out;
 
     if (this->out == nullptr)
     {
@@ -36,17 +64,53 @@ void GameIO::doRound ()
     OUT << std::endl <<"=== Start Round === " << std::endl;
     while (!game->factoriesEmpty ())
     {
-        printTurn ();
-        Turn * turn = getTurn ();
-        int points = game->turn (turn);
-
-        // TODO store turn
-        delete turn;
-
-        // TODO - NEED TO REMOVE OR PLACE SOMEWHERE ELSE
-        OUT << "PLAYER POINTS: " << points << std::endl;
+        doTurn ();
     }
-    print_final();
+}
+
+std::string GameIO::doCmd ()
+{
+    OUT << PROMPT;
+
+    std::string cmd;
+    IN >> cmd;
+
+    if (cmd == "turn")
+    {
+        turnCmd ();
+    }
+    else if (cmd == "save")
+    {
+        saveCmd ();
+    }
+    else if (IN.eof ())
+    {
+        OUT << "Have a really awesome day. Goodbye." << std::endl;
+        // TODO are we allowed to use exit()?
+        exit (0);
+    }
+
+    return cmd;
+}
+
+void GameIO::turnCmd ()
+{
+    Turn * turn = getTurn ();
+    game->turn (turn);
+}
+
+void GameIO::saveCmd ()
+{
+    std::string filename;
+    IN >> filename;
+    saveGame (filename);
+}
+
+void GameIO::doTurn ()
+{
+    printTurn ();
+    while  (doCmd () != "turn")
+    {}
 }
 
 void GameIO::printTurn ()
@@ -83,57 +147,76 @@ Turn * GameIO::inputTurn ()
 {
     Turn * turn = nullptr;
 
-    OUT << "> ";
-    string cmd; // command
+    int factory;
+    int row;
+    char colour;
 
-    IN >> cmd; // get the command string input
-    if (cmd == "turn")
+    IN >> factory;
+    IN >> colour;
+    IN >> row;
+
+    if (colour == 'F')
     {
-        int factory;
-        int row;
-        char colour;
-
-        IN >> factory;
-        IN >> colour;
-        IN >> row;
-        /*      Error checking      */
-
-        // Check if player is trying to take the 'first' tile
-        if (colour == 'F')
-        {
-            OUT << "you cannot move the 'F' tile! \n";
-            turn = nullptr;
-        }
-
-        // Checking if the mozaic tile has already been filled in that row
-        if(game->get_next_player()->get_mozaic()->check_line(colour, row)) { 
-            OUT << "Cannot place tile(s) there! \n";
-            turn = nullptr;
-        }
-
-        // Checking if selected factory actually contains the tile the player is requesting
-        if (game->factories[factory]->get_amount(colour) == 0)
-        {
-            OUT << "Factory does not contain that tile! \n";
-            turn = nullptr;
-        }
-        
-        // Checks if the selected row is already full
-        if (game->get_next_player()->get_mozaic()->isRowFull(row))
-        {
-            OUT << "Selected row is already full \n";
-            turn = nullptr;
-        }
-
-        else
-        {
-            turn = new Turn (factory, row, colour);
-        }
+        OUT << "you cannot move the 'F' tile! \n";
+        turn = nullptr;
+    }
+    else
+    {
+        turn = new Turn (factory, row, colour);
     }
 
     return turn;
 }
 
+void GameIO::addPlayer ()
+{
+    std::string name;
+    int playerNum = game->numPlayers () + 1;
+
+    OUT << "Enter a name for player " << playerNum << std::endl << PROMPT;
+    IN >> name;
+    OUT << std::endl;
+
+    game->add_player(new Player(name));
+}
+
+void GameIO::addPlayer (int numPlayers)
+{
+    for (int i = 0; i < numPlayers; i++)
+    {
+        addPlayer ();
+    }
+}
+
+Game_manager * GameIO::loadGame ()
+{
+    int numPlayers = 2;
+
+    delete this->game;
+
+    // Load starting tile bag
+    std::string startingTileBag;
+    IN >> startingTileBag;
+
+    this->game = new Game_manager (startingTileBag);
+
+    // Load players
+    addPlayer (numPlayers);
+
+    // Load turns
+    while (moreInput ())
+    {
+        doTurn();
+    }
+
+    return this->game;
+}
+
+void GameIO::saveGame (std::string filename)
+{
+    std::ofstream file (filename);
+    file << *game;
+}
 
 void GameIO::print_final() { //RECENTLY ADDED - PROBLEM: SOMETIMES PRINTS PLAYER 2 FIRST INSTEAD OF PLAYER 1, DUE TO ROTATION
     OUT << "=== GAME OVER ===\n\n";
@@ -145,15 +228,3 @@ void GameIO::print_final() { //RECENTLY ADDED - PROBLEM: SOMETIMES PRINTS PLAYER
     OUT << game->return_winner_name();
 }
 
-
-
-// bool GameIO::checkColour(char colour, int row)
-// {
-//     bool result= false;
-//     if(game->get_next_player()->get_mozaic()->check_line(colour, row))
-//     {
-//         result=true;
-//     }
-//     return result;
-
-// }

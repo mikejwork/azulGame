@@ -17,8 +17,10 @@ public:
     Game_manager (std::string startingTileBag);
     ~Game_manager ();
 
+    void add_player(Player* player);
     Player* get_next_player();
     void cycle_players();
+    int numPlayers ();
 
     bool factoriesEmpty ();
     int turn(Turn * turn);
@@ -28,21 +30,20 @@ public:
         std::ostream & stream,
         Game_manager & game);
 
-
-  //Braden Implementation - Remove this IF NEEDED
+    //Braden Implementation - Remove this IF NEEDED
     std::string return_winner_name();
-    std::vector<Factory*> factories;
-    
+    // Braden also made factories public but I've left it private for now
+
 private:
     // Player related-----------------
     int player_turn;
     std::vector<Player*> players;
     void setup_players();
-    void add_player(Player* player);
 
     // Factory related-----------------
     void setup_factories();
     bool check_if_empty();
+    std::vector<Factory*> factories;
     void leftovers_to_centre(char colour, int factory);
 
     // Tilebag related-----------------
@@ -51,14 +52,10 @@ private:
     // Round related-------------------
     void process_rounds();
     bool process_turn();
-    bool first_tile_taken;
+    bool first_tile_taken
     void finish_update();
 
     std::vector <Turn *> turns;
-
-  
-
-
 };
 
 
