@@ -11,17 +11,17 @@ Mozaic::Mozaic()
 }
 
 Mozaic::~Mozaic()
-{}
+{
+}
 
-std::ostream & operator<< (std::ostream & stream, Mozaic & m)
+std::ostream &operator<<(std::ostream &stream, Mozaic &m)
 {
     int row_num = 1;
     int blank_space = 4;
 
-    std::vector<Row*> & rows = m.rows;
-    std::vector<Tile*> & broken = m.broken;
-    Tile * (& mozaic)[MOZAIC_HEIGHT][MOZAIC_WIDTH] = m.mozaic;
-
+    std::vector<Row *> &rows = m.rows;
+    std::vector<Tile *> &broken = m.broken;
+    Tile *(&mozaic)[MOZAIC_HEIGHT][MOZAIC_WIDTH] = m.mozaic;
 
     for (int row = 1; row < 6; row++)
     {
@@ -31,33 +31,32 @@ std::ostream & operator<< (std::ostream & stream, Mozaic & m)
             stream << "  ";
         }
 
-        int empty = row_num - rows[row_num-1]->get_size();
+        int empty = row_num - rows[row_num - 1]->get_size();
         for (int index = 0; index < empty; index++)
         {
             stream << " .";
         }
 
-        for (int index = 0; index < rows[row_num-1]->get_size(); index++)
+        for (int index = 0; index < rows[row_num - 1]->get_size(); index++)
         {
-            char colour = rows[row_num-1]->get_index(index)->get_colour();
+            char colour = rows[row_num - 1]->get_index(index)->get_colour();
             stream << " " << colour;
         }
         blank_space--;
         row_num++;
 
-        stream << " ||" ;
+        stream << " ||";
         for (int i = 0; i < 5; i++)
         {
             if (mozaic[row - 1][i] == nullptr)
             {
-                stream << " ." ;
+                stream << " .";
             }
             else
             {
                 char colour = mozaic[row - 1][i]->get_colour();
                 stream << " " << colour;
             }
-
         }
 
         stream << std::endl;
@@ -65,7 +64,8 @@ std::ostream & operator<< (std::ostream & stream, Mozaic & m)
 
     stream << "broken: ";
 
-    for (std::string::size_type i = 0; i < broken.size(); i++) {
+    for (std::string::size_type i = 0; i < broken.size(); i++)
+    {
         stream << broken[i]->get_colour() << " ";
     }
 
@@ -73,7 +73,6 @@ std::ostream & operator<< (std::ostream & stream, Mozaic & m)
 
     return stream;
 }
-
 
 void Mozaic::update_mozaic()
 {
@@ -83,12 +82,12 @@ void Mozaic::update_mozaic()
         int size = row_num - rows[row_num - 1]->get_size(); //size will return the value of how many empty spaces are in the row
         if (size == 0)
         {
-            for (int i = 0; i < NUM_ROWS; i++)
+            for (int col = 0; col < NUM_COLS; col++)
             {
-                if (rows[row_num - 1]->get_index(row)->get_colour() == mask[row][i])
+                if (rows[row_num - 1]->get_index(row)->get_colour() == mask[row][col])
                 {
-                    mozaic[row_num - 1][i] = new Tile(rows[row_num - 1]->get_index(row)->get_colour());
-                    player_points = count(row_num - 1, i);
+                    mozaic[row_num - 1][col] = new Tile(rows[row_num - 1]->get_index(row)->get_colour());
+                    player_points = count(row_num - 1, col);
                 }
             }
             rows[row_num - 1]->clear_row();
@@ -96,12 +95,12 @@ void Mozaic::update_mozaic()
         row_num++;
     }
 }
-int Mozaic::get_player_points() {
+int Mozaic::get_player_points()
+{
     int temp = this->player_points;
     this->player_points = 0;
     return temp;
 }
-
 
 int Mozaic::count(int row_num, int col)
 {
@@ -120,7 +119,8 @@ int Mozaic::count(int row_num, int col)
     once = true;
     while (!returnCheck(row_num, r, RIGHT))
     {
-        if (once == true) {
+        if (once == true)
+        {
             countRight = 1;
             once = false;
         }
@@ -131,7 +131,8 @@ int Mozaic::count(int row_num, int col)
 
     while (!returnCheck(row_num, l, LEFT))
     {
-        if (once == true) {
+        if (once == true)
+        {
             countLeft = 1;
             once = false;
         }
@@ -142,7 +143,8 @@ int Mozaic::count(int row_num, int col)
 
     while (!returnCheck(b, col, BACK))
     {
-        if (once == true) {
+        if (once == true)
+        {
             countBot = 1;
             once = false;
         }
@@ -153,7 +155,8 @@ int Mozaic::count(int row_num, int col)
 
     while (!returnCheck(f, col, TOP))
     {
-        if (once == true) {
+        if (once == true)
+        {
             countTop = 1;
             once = false;
         }
@@ -220,7 +223,7 @@ bool Mozaic::returnCheck(int row_num, int i, int a)
     return ans;
 }
 
-void Mozaic::add_tiles(int amount, int row, Tile* tile)
+void Mozaic::add_tiles(int amount, int row, Tile *tile)
 {
     int tiles_filled = rows[row - 1]->get_size();
     int spaces_left = row - tiles_filled;
@@ -245,10 +248,53 @@ void Mozaic::add_tiles(int amount, int row, Tile* tile)
             rows[row - 1]->add(new Tile(*tile));
         }
     }
-
 }
 
-void Mozaic::firstTileTaken ()
+void Mozaic::firstTileTaken()
 {
     broken.push_back(new Tile('F'));
+}
+
+bool Mozaic::check_line(char colour, int row) //THIS IS USED SEE IF THERE IS A TILE ALREADY IN A MOZAIC - CALLED IN GAMEIO
+{
+    bool result = false;
+    for (int col = 0; col < NUM_COLS; col++) //loops through the amount of COLS
+    {
+        if (mozaic[row - 1][col] != nullptr) //Safety check to prevent from crashing - could remove
+        {
+            if (mozaic[row - 1][col]->get_colour() == colour) //Checks if that col is equal to the colour being placed.
+            {
+                result = true;
+            }
+        }
+    }
+    if(rows[row - 1]->get_size() != 0)
+    {
+        if (colour != rows[row - 1]->get_index(0)->get_colour())
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+void Mozaic::return_broken(TileBag* tilebag)
+{ //THIS NEEDS TO RETURN ALL BROKEN TILES TO END OF TILEBAG
+    for (std::string::size_type i = 0; i < broken.size(); i++)
+    {
+        if (broken[i]->get_colour() != 'F')
+        {
+            tilebag->add_back(new Tile(*broken[i]));
+        }
+    }
+    broken.clear();
+}
+
+bool Mozaic::isRowFull(int row)
+{
+    if (rows[row - 1]->get_size() == row)
+    {
+        return true;
+    }
+    return false;
 }

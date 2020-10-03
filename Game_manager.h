@@ -30,6 +30,10 @@ public:
         std::ostream & stream,
         Game_manager & game);
 
+    //Braden Implementation - Remove this IF NEEDED
+    std::string return_winner_name();
+    // Braden also made factories public but I've left it private for now
+
 private:
     // Player related-----------------
     int player_turn;

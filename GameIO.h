@@ -47,6 +47,12 @@ class GameIO
 
         bool moreInput ();
 
+        //TEMPORARY
+        bool checkColour(char colour, int row);
+
+
+        void print_final();
+
         static std::ostream * devNull;
 };
 

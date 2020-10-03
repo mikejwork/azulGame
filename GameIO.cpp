@@ -71,7 +71,7 @@ void GameIO::doRound ()
 std::string GameIO::doCmd ()
 {
     OUT << PROMPT;
-    
+
     std::string cmd;
     IN >> cmd;
 
@@ -216,4 +216,14 @@ void GameIO::saveGame (std::string filename)
 {
     std::ofstream file (filename);
     file << *game;
+}
+
+void GameIO::print_final() { //RECENTLY ADDED - PROBLEM: SOMETIMES PRINTS PLAYER 2 FIRST INSTEAD OF PLAYER 1, DUE TO ROTATION
+    OUT << "=== GAME OVER ===\n\n";
+    OUT << "Final Scores: \n";
+    OUT << "Player " << game->get_next_player()->get_name() << ": "<< game->get_next_player()->get_points() <<std::endl;
+    game->cycle_players();
+    OUT << "Player " << game->get_next_player()->get_name() << ": " << game->get_next_player()->get_points() <<std::endl;
+    game->cycle_players(); //need to remove, this is just for testing
+    OUT << "Player " << game->return_winner_name() << " wins! \n" <<std::endl;
 }
