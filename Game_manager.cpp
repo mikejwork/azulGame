@@ -151,16 +151,11 @@ int Game_manager::turn(Turn * turn)
         factories[factory]->clear();
     }
 
-    // TODO - NEED TO MOVE TO END OF ROUND
-    mozaic->update_mozaic();
-    player->add_points(mozaic->get_player_points());
-
-    cycle_players();
-
     if (factoriesEmpty ())
     {
-        // TODO end of round
+        finish_update(); // Initiates the final calculations needed for that round - Player Points, move tiles to mozaic
     }
+    cycle_players();
 
     return player->get_points ();
 }
@@ -216,15 +211,21 @@ void Game_manager::finish_update() {
 
 std::string Game_manager::return_winner_name() //THIS IS USED TO PRINT THE FINAL SCORES
 {
-    std::string winner = get_next_player()->get_name();
+    std::string returnString = "Player " + get_next_player()->get_name() + "wins!\n";
+    ;
     for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement?
     {
-        Player* temp = get_next_player();
+        Player *temp = get_next_player();
         cycle_players();
-        if (temp->get_points() >get_next_player()->get_points() ) {
-            winner = temp->get_name();
+        if (temp->get_points() > get_next_player()->get_points())
+        {
+            returnString = "Player " + temp->get_name() + " wins!\n";
+        }
+        if (temp->get_points() == get_next_player()->get_points())
+        {
+            returnString = "It's a draw!\n";
         }
     }
     //delete temp; //need to delete temp
-    return winner;
+    return returnString;
 }

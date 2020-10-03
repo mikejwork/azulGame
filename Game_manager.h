@@ -33,6 +33,8 @@ public:
     //Braden Implementation - Remove this IF NEEDED
     std::string return_winner_name();
     // Braden also made factories public but I've left it private for now
+    //Need factories public to access it from gameIO
+    std::vector<Factory*> factories; 
 
 private:
     // Player related-----------------
@@ -43,7 +45,6 @@ private:
     // Factory related-----------------
     void setup_factories();
     bool check_if_empty();
-    std::vector<Factory*> factories;
     void leftovers_to_centre(char colour, int factory);
 
     // Tilebag related-----------------
@@ -52,7 +53,7 @@ private:
     // Round related-------------------
     void process_rounds();
     bool process_turn();
-    bool first_tile_taken
+    bool first_tile_taken;
     void finish_update();
 
     std::vector <Turn *> turns;

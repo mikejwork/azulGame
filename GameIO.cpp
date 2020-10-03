@@ -23,30 +23,30 @@ public:
     {
         return ch;
     }
-    std::streamsize sputn( const char_type* s, std::streamsize count )
+    std::streamsize sputn(const char_type *s, std::streamsize count)
     {
-       return count;
+        return count;
     }
     static NullBuf instance;
 };
 
 NullBuf NullBuf::instance;
-std::ostream * GameIO::devNull = new std::ostream (&NullBuf::instance);
+std::ostream *GameIO::devNull = new std::ostream(&NullBuf::instance);
 
-bool GameIO::moreInput ()
+bool GameIO::moreInput()
 {
-    while (std::isspace (IN.peek ()))
+    while (std::isspace(IN.peek()))
     {
-        IN.get ();
+        IN.get();
     }
 
-    return !IN.eof ();
+    return !IN.eof();
 }
 
-GameIO::GameIO (
-    Game_manager * game,
-    std::istream * in,
-    std::ostream * out)
+GameIO::GameIO(
+    Game_manager *game,
+    std::istream *in,
+    std::ostream *out)
 {
     this->game = game;
     this->in = in;
@@ -59,16 +59,18 @@ GameIO::GameIO (
 }
 
 // A round lasts until all factories are empty.
-void GameIO::doRound ()
+void GameIO::doRound()
 {
-    OUT << std::endl <<"=== Start Round === " << std::endl;
-    while (!game->factoriesEmpty ())
+    OUT << std::endl
+        << "=== Start Round === " << std::endl;
+    while (!game->factoriesEmpty())
     {
-        doTurn ();
+        doTurn();
     }
+    print_final(); //Prints the final scores / end of game 
 }
 
-std::string GameIO::doCmd ()
+std::string GameIO::doCmd()
 {
     OUT << PROMPT;
 
@@ -77,46 +79,47 @@ std::string GameIO::doCmd ()
 
     if (cmd == "turn")
     {
-        turnCmd ();
+        turnCmd();
     }
     else if (cmd == "save")
     {
-        saveCmd ();
+        saveCmd();
     }
-    else if (IN.eof ())
+    else if (IN.eof())
     {
         OUT << "Have a really awesome day. Goodbye." << std::endl;
         // TODO are we allowed to use exit()?
-        exit (0);
+        exit(0);
     }
 
     return cmd;
 }
 
-void GameIO::turnCmd ()
+void GameIO::turnCmd()
 {
-    Turn * turn = getTurn ();
-    game->turn (turn);
+    Turn *turn = getTurn();
+    game->turn(turn);
 }
 
-void GameIO::saveCmd ()
+void GameIO::saveCmd()
 {
     std::string filename;
     IN >> filename;
-    saveGame (filename);
+    saveGame(filename);
 }
 
-void GameIO::doTurn ()
+void GameIO::doTurn()
 {
-    printTurn ();
-    while  (doCmd () != "turn")
-    {}
+    printTurn();
+    while (doCmd() != "turn")
+    {
+    }
 }
 
-void GameIO::printTurn ()
+void GameIO::printTurn()
 {
-    Player * player = game->get_next_player ();
-    string playerName = player->get_name ();
+    Player *player = game->get_next_player();
+    string playerName = player->get_name();
 
     OUT << "Turn for player: " << playerName << std::endl;
 
@@ -125,27 +128,26 @@ void GameIO::printTurn ()
     game->print_factories(OUT);
 
     //Print mozaic [sic]
-    Mozaic * mozaic = player->get_mozaic ();
+    Mozaic *mozaic = player->get_mozaic();
     OUT << "Mozaic for: " << playerName << std::endl;
     OUT << *mozaic << std::endl;
-
 }
 
-Turn * GameIO::getTurn ()
+Turn *GameIO::getTurn()
 {
-    Turn * turn = nullptr;
+    Turn *turn = nullptr;
 
     while (turn == nullptr)
     {
-        turn = inputTurn ();
+        turn = inputTurn();
     }
 
     return turn;
 }
 
-Turn * GameIO::inputTurn ()
+Turn *GameIO::inputTurn()
 {
-    Turn * turn = nullptr;
+    Turn *turn = nullptr;
 
     int factory;
     int row;
@@ -160,35 +162,59 @@ Turn * GameIO::inputTurn ()
         OUT << "you cannot move the 'F' tile! \n";
         turn = nullptr;
     }
+
+    //RECENTLY ADDED: THREE IF STATEMENTS AFTER MERGE
+    // Checking if the mozaic tile has already been filled in that row
+    if (game->get_next_player()->get_mozaic()->check_line(colour, row))
+    {
+        OUT << "Cannot place tile(s) there! \n";
+        turn = nullptr;
+    }
+
+    // Checking if selected factory actually contains the tile the player is requesting
+    if (game->factories[factory]->get_amount(colour) == 0)
+    {
+        OUT << "Factory does not contain that tile! \n";
+        turn = nullptr;
+    }
+
+    // Checks if the selected row is already full
+    if (game->get_next_player()->get_mozaic()->isRowFull(row))
+    {
+        OUT << "Selected row is already full \n";
+        turn = nullptr;
+    }
+
     else
     {
-        turn = new Turn (factory, row, colour);
+        turn = new Turn(factory, row, colour);
     }
 
     return turn;
 }
 
-void GameIO::addPlayer ()
+void GameIO::addPlayer()
 {
     std::string name;
-    int playerNum = game->numPlayers () + 1;
+    int playerNum = game->numPlayers() + 1;
 
-    OUT << "Enter a name for player " << playerNum << std::endl << PROMPT;
+    OUT << "Enter a name for player " << playerNum << std::endl
+        << PROMPT;
     IN >> name;
     OUT << std::endl;
 
     game->add_player(new Player(name));
 }
 
-void GameIO::addPlayer (int numPlayers)
+void GameIO::addPlayer(int numPlayers)
 {
     for (int i = 0; i < numPlayers; i++)
     {
-        addPlayer ();
+        addPlayer();
     }
 }
 
-Game_manager * GameIO::loadGame ()
+Game_manager *GameIO::loadGame()
 {
     int numPlayers = 2;
 
@@ -198,13 +224,13 @@ Game_manager * GameIO::loadGame ()
     std::string startingTileBag;
     IN >> startingTileBag;
 
-    this->game = new Game_manager (startingTileBag);
+    this->game = new Game_manager(startingTileBag);
 
     // Load players
-    addPlayer (numPlayers);
+    addPlayer(numPlayers);
 
     // Load turns
-    while (moreInput ())
+    while (moreInput())
     {
         doTurn();
     }
@@ -212,19 +238,19 @@ Game_manager * GameIO::loadGame ()
     return this->game;
 }
 
-void GameIO::saveGame (std::string filename)
+void GameIO::saveGame(std::string filename)
 {
-    std::ofstream file (filename);
+    std::ofstream file(filename);
     file << *game;
 }
 
-void GameIO::print_final() { //RECENTLY ADDED - PROBLEM: SOMETIMES PRINTS PLAYER 2 FIRST INSTEAD OF PLAYER 1, DUE TO ROTATION
+void GameIO::print_final()
+{ //RECENTLY ADDED - PROBLEM: SOMETIMES PRINTS PLAYER 2 FIRST INSTEAD OF PLAYER 1, DUE TO ROTATION
     OUT << "=== GAME OVER ===\n\n";
     OUT << "Final Scores: \n";
-    OUT << "Player " << game->get_next_player()->get_name() << ": "<< game->get_next_player()->get_points() <<std::endl;
+    OUT << "Player " << game->get_next_player()->get_name() << ": " << game->get_next_player()->get_points() << std::endl;
     game->cycle_players();
-    OUT << "Player " << game->get_next_player()->get_name() << ": " << game->get_next_player()->get_points() <<std::endl;
-    game->cycle_players(); //need to remove, this is just for testing 
+    OUT << "Player " << game->get_next_player()->get_name() << ": " << game->get_next_player()->get_points() << std::endl;
+    game->cycle_players(); //need to remove, this is just for testing
     OUT << game->return_winner_name();
 }
-
