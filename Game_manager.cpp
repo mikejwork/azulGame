@@ -130,10 +130,10 @@ int Game_manager::turn(Turn *turn)
 
     // Add tiles to the mozaic rows
     mozaic->add_tiles(amount, row, new Tile(colour));
-   // If the factory is equal to zero, the whole factory will not be
-   // emptied like it would normally, only the tiles taken will be removed
+    // If the factory is equal to zero, the whole factory will not be
+    // emptied like it would normally, only the tiles taken will be removed
     if (factory == 0)
-    {   
+    {
         // First tile condition
         if (!first_tile_taken)
         {
@@ -152,17 +152,31 @@ int Game_manager::turn(Turn *turn)
     }
 
 
-    cycle_players();
-
     if (factoriesEmpty())
     {
-        mozaic->update_mozaic();
-        player->add_points(mozaic->get_player_points());
-        mozaic->return_broken(tilebag);
+        finish_update();
     }
-
+    cycle_players();
     return player->get_points();
 }
+
+void Game_manager::finish_update() {
+
+    for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement?
+    {
+        Player *temp = get_next_player();
+        temp->get_mozaic()->update_mozaic();
+        temp->add_points(temp->get_mozaic()->get_player_points());
+        temp->get_mozaic()->return_broken(tilebag);
+        cycle_players();
+    }
+    if (player_turn == 0) //This places player 1 on the top of the Final Score
+       {
+        cycle_players();
+       }
+}
+
+
 
 void Game_manager::leftovers_to_centre(char colour, int factory)
 {
@@ -199,15 +213,21 @@ std::ostream &operator<<(std::ostream &stream, Game_manager &game)
 
 std::string Game_manager::return_winner_name() //THIS IS USED TO PRINT THE FINAL SCORES
 {
-    std::string winner = get_next_player()->get_name();
-    for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement? 
+    std::string returnString = "Player " + get_next_player()->get_name() + "wins!\n";
+    ;
+    for (int i = 0; i < (int)players.size(); i++) //this is used just in case there are multiple users - future implement?
     {
-        Player* temp = get_next_player();
+        Player *temp = get_next_player();
         cycle_players();
-        if (temp->get_points() >get_next_player()->get_points() ) {
-            winner = temp->get_name();
+        if (temp->get_points() > get_next_player()->get_points())
+        {
+            returnString = "Player " + temp->get_name() + " wins!\n";
+        }
+        if (temp->get_points() == get_next_player()->get_points())
+        {
+            returnString = "It's a draw!\n";
         }
     }
     //delete temp; //need to delete temp
-    return winner;
+    return returnString;
 }

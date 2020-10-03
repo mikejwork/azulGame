@@ -52,6 +52,7 @@ private:
     void process_rounds();
     bool process_turn();
     bool first_tile_taken;
+    void finish_update();
 
     std::vector <Turn *> turns;
 

@@ -142,7 +142,7 @@ void GameIO::print_final() { //RECENTLY ADDED - PROBLEM: SOMETIMES PRINTS PLAYER
     game->cycle_players();
     OUT << "Player " << game->get_next_player()->get_name() << ": " << game->get_next_player()->get_points() <<std::endl;
     game->cycle_players(); //need to remove, this is just for testing 
-    OUT << "Player " << game->return_winner_name() << " wins! \n" <<std::endl;
+    OUT << game->return_winner_name();
 }
 
 
