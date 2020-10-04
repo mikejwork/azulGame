@@ -132,7 +132,7 @@ void Game_manager::cycle_players()
 // Returns points
 int Game_manager::turn(Turn * turn)
 {
-    turns.push_back (turn);
+    turns.push_back(turn);
 
     Player * player = get_next_player ();
     Mozaic * mozaic = player->get_mozaic ();
@@ -163,6 +163,7 @@ int Game_manager::turn(Turn * turn)
     {
         finish_update(); // Initiates the final calculations needed for that round - Player Points, move tiles to mozaic
     }
+
     cycle_players();
 
     return player->get_points ();
@@ -215,6 +216,7 @@ void Game_manager::finish_update() {
        {
         cycle_players();
        }
+       first_tile_taken = false;
 }
 
 std::string Game_manager::return_winner_name() //THIS IS USED TO PRINT THE FINAL SCORES

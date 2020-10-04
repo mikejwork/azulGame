@@ -57,6 +57,9 @@ private:
     bool first_tile_taken;
     void finish_update();
 
+    bool check_if_full(char colour, int row);
+
+
     std::vector <Turn *> turns;
 };
 

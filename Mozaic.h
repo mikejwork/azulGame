@@ -32,6 +32,10 @@ public:
         std::ostream &stream,
         Mozaic &mozaic);
 
+
+    bool check_place(char colour, int row);
+
+
     void add_tiles(int amount, int row, Tile *tile);
     void update_points(int row_num, int i);
     bool check_line(char colour, int row);

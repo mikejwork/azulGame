@@ -177,11 +177,10 @@ bool Mozaic::returnCheck(int row_num, int i, int a)
     if (a == 1)
     {
         //CHECKS DOWN
-        if (row_num + 1 <= 5) //This prevents checking outside of array
+        if (row_num + 1 < 5) //This prevents checking outside of array
         {
             if (mozaic[row_num + 1][i] != nullptr)
             {
-
                 ans = false;
             }
         }
@@ -229,7 +228,16 @@ void Mozaic::add_tiles(int amount, int row, Tile *tile)
     int spaces_left = row - tiles_filled;
     int leftover = 0;
 
-    if (amount > spaces_left)
+    if (check_place(tile->get_colour(), row) == true)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            broken.push_back(new Tile(*tile));
+        }
+    } //END OF ADD
+
+
+    else if (amount > spaces_left)
     {
         leftover = amount - spaces_left;
         for (int i = 0; i < spaces_left; i++)
@@ -255,6 +263,24 @@ void Mozaic::firstTileTaken()
     broken.push_back(new Tile('F'));
 }
 
+bool Mozaic::check_place(char colour, int row) //returns true if: mozaic has that colour already, or the tile already has other colours, and the tile cannot be placed.
+{
+    bool result = false;
+    int count = 0;
+    for (int i = 1; i <= NUM_ROWS; i++)
+    {
+        if (check_line(colour, i) && isRowFull(i))
+        {
+            count++;
+        }
+    }
+    if (count == NUM_ROWS)
+    {
+        result = true;
+    }
+    return result;
+}
+
 bool Mozaic::check_line(char colour, int row) //THIS IS USED SEE IF THERE IS A TILE ALREADY IN A MOZAIC - CALLED IN GAMEIO
 {
     bool result = false;
@@ -268,7 +294,7 @@ bool Mozaic::check_line(char colour, int row) //THIS IS USED SEE IF THERE IS A T
             }
         }
     }
-    if(rows[row - 1]->get_size() != 0)
+    if (rows[row - 1]->get_size() != 0) //Used to check if the colour is already in the row
     {
         if (colour != rows[row - 1]->get_index(0)->get_colour())
         {
@@ -278,7 +304,7 @@ bool Mozaic::check_line(char colour, int row) //THIS IS USED SEE IF THERE IS A T
     return result;
 }
 
-void Mozaic::return_broken(TileBag* tilebag)
+void Mozaic::return_broken(TileBag *tilebag)
 { //THIS NEEDS TO RETURN ALL BROKEN TILES TO END OF TILEBAG
     for (std::string::size_type i = 0; i < broken.size(); i++)
     {

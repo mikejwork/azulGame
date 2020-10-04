@@ -153,6 +153,7 @@ Turn *GameIO::getTurn()
     IN >> colour;
     IN >> row;
 
+    int count = 0;
     colour = toupper(colour);
 
     if (colour == 'F')
@@ -160,12 +161,21 @@ Turn *GameIO::getTurn()
         OUT << "you cannot move the 'F' tile! \n";
         turn = nullptr;
     }
+
+     else if (game->get_next_player()->get_mozaic()->check_place(colour, row))
+    {
+        OUT << "Player cannot place any more tiles, moving to broken" << std::endl;
+        turn = new Turn(factory, row, colour);
+        count++;
+    }
+
     //RECENTLY ADDED: THREE IF STATEMENTS AFTER MERGE
     // Checking if the mozaic tile has already been filled in that row
     else if (game->get_next_player()->get_mozaic()->check_line(colour, row))
     {
-        OUT << "Cannot place tile(s) there! \n";
-        turn = nullptr;
+            OUT << "Cannot place tile(s) there! \n";
+            turn = nullptr;
+            count++;
     }
 
     // Checking if selected factory actually contains the tile the player is requesting
@@ -173,15 +183,16 @@ Turn *GameIO::getTurn()
     {
         OUT << "Factory does not contain that tile! \n";
         turn = nullptr;
+        count++;
     }
 
     // Checks if the selected row is already full
     else if (game->get_next_player()->get_mozaic()->isRowFull(row))
     {
-        OUT << "Selected row is already full \n";
+        OUT << "Row is already full \n";
         turn = nullptr;
+        count++;
     }
-
     else
     {
         turn = new Turn(factory, row, colour);
