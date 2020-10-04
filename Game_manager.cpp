@@ -39,11 +39,19 @@ void Game_manager::setup_factories()
 
     // Setup the centre factory
     factories.push_back(new Factory(0));
-    factories[0]->add_tile(new Tile('F'));
     // Setup factories 1-5
     for (int i = 1; i < NUM_FACTORIES; i++)
     {
         factories.push_back(new Factory(i));
+    }
+    populate_factories();
+}
+
+void Game_manager::populate_factories()
+{
+    factories[0]->add_tile(new Tile('F'));
+    for (int i = 1; i < NUM_FACTORIES; i++)
+    {
         for (int t = 0; t < MAX_TILES; t++)
         {
             factories[i]->add_tile(tilebag->get(0));

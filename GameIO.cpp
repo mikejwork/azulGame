@@ -67,7 +67,6 @@ void GameIO::doRound()
     {
         doTurn();
     }
-    print_final(); //Prints the final scores / end of game
 }
 
 std::string GameIO::doCmd()
