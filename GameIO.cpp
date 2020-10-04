@@ -125,6 +125,7 @@ void GameIO::saveCmd()
     std::string filename;
     IN >> filename;
     saveGame(filename);
+    OUT << "Game successfully saved to " << filename << std::endl;
 }
 
 void GameIO::doTurn()
@@ -204,12 +205,18 @@ Turn *GameIO::getTurn()
         turn = nullptr;
     }
 
+     else if (game->get_next_player()->get_mozaic()->check_place(colour, row))
+    {
+        OUT << "Player cannot place any more tiles, moving to broken" << std::endl;
+        turn = new Turn(factory, row, colour);
+    }
+
     //RECENTLY ADDED: THREE IF STATEMENTS AFTER MERGE
     // Checking if the mozaic tile has already been filled in that row
     else if (game->get_next_player()->get_mozaic()->check_line(colour, row))
     {
-        OUT << "Cannot place tile(s) there! \n";
-        turn = nullptr;
+            OUT << "Cannot place tile(s) there! \n";
+            turn = nullptr;
     }
 
     // Checking if selected factory actually contains the tile the player is requesting
@@ -222,10 +229,9 @@ Turn *GameIO::getTurn()
     // Checks if the selected row is already full
     else if (game->get_next_player()->get_mozaic()->isRowFull(row))
     {
-        OUT << "Selected row is already full \n";
+        OUT << "Row is already full \n";
         turn = nullptr;
     }
-
     else
     {
         turn = new Turn(factory, row, colour);
@@ -282,7 +288,7 @@ Game_manager *GameIO::loadGame()
             doTurn();
         }
     }
-
+    OUT << "Successfully loaded save" << std::endl;
     return this->game;
 }
 

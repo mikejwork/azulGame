@@ -29,6 +29,7 @@ void Menu::display_menu()
     // Error checking / validation of user input
     do {
         std::cout << "> ", std::cin >> input;
+        valid = true;
         if (std::cin.fail() || input > 4 || input < 1)
         {
             std::cin.clear();
