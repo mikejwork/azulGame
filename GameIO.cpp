@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <cctype>
+#include <limits>
 
 #define IN (*in)
 #define OUT (*out)
@@ -89,6 +90,16 @@ std::string GameIO::doCmd()
         OUT << "Have a really awesome day. Goodbye." << std::endl;
         // TODO are we allowed to use exit()?
         exit(0);
+    }
+    else
+    {
+        OUT << "Invalid command" << std::endl;
+        OUT << "Valid commands are:" << std::endl;
+        OUT << "\tturn <factory> <colour> <row>" << std::endl;
+        OUT << "\tsave <filename>" << std::endl;
+
+        // Flush buffer
+        IN.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
     return cmd;
@@ -224,10 +235,17 @@ Game_manager *GameIO::loadGame()
     // Load players
     addPlayer(numPlayers);
 
-    // Load turns
-    while (moreInput())
+    if (IN.fail() || IN.eof())
     {
-        doTurn();
+        this->game = nullptr;
+    }
+    else
+    {
+        // Load turns
+        while (moreInput())
+        {
+            doTurn();
+        }
     }
 
     return this->game;

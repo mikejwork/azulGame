@@ -51,8 +51,10 @@ void Menu::input_logic(int input)
     }
     else if (input == LOAD_GAME)
     {
-        loadGame ();
-        playGame ();
+        if (loadGame ())
+        {
+            playGame ();
+        }
     }
     else if (input == CREDITS)
     {
@@ -66,8 +68,10 @@ void Menu::input_logic(int input)
     }
 }
 
-void Menu::loadGame ()
+bool Menu::loadGame ()
 {
+    bool success = true;
+
     std::cout << "Enter file name" << std::endl << "> ";
 
     std::string filename;
@@ -77,6 +81,15 @@ void Menu::loadGame ()
     GameIO * io = new GameIO (nullptr, &file, nullptr);
     game_manager = io->loadGame ();
     delete io;
+
+    if (game_manager == nullptr)
+    {
+        std::cout << "ERROR - " << filename << " is not a valid save file."
+            << std::endl;
+        success = false;
+    }
+
+    return success;
 }
 
 void Menu::playGame ()
