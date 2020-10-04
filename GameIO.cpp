@@ -1,3 +1,4 @@
+\
 // This class handles I/O for the game, and calls methods in Game_manager.
 // The purpose of this class is to easily switch between taing input from stdin
 // and taking input from a save file.
@@ -8,6 +9,7 @@
 
 #include <iostream>
 #include <cctype>
+#include <limits>
 
 #define IN (*in)
 #define OUT (*out)
@@ -90,6 +92,16 @@ std::string GameIO::doCmd()
         // TODO are we allowed to use exit()?
         exit(0);
     }
+    else
+    {
+        OUT << "Invalid command" << std::endl;
+        OUT << "Valid commands are:" << std::endl;
+        OUT << "\tturn <factory> <colour> <row>" << std::endl;
+        OUT << "\tsave <filename>" << std::endl;
+
+        // Flush buffer
+        IN.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
 
     return cmd;
 }
@@ -131,14 +143,46 @@ void GameIO::printTurn()
 
     OUT << "Turn for player: " << playerName << std::endl;
 
-    //Print factories
+    printFactories ();
+    printMozaic (player);
+}
+
+void GameIO::printFactories ()
+{
     OUT << "Factories: " << std::endl;
     game->print_factories(OUT);
+}
 
-    //Print mozaic [sic]
+void GameIO::printScore (Player * player)
+{
+    string playerName = player->get_name();
+    int score = player->get_points ();
+
+    OUT << "Score for player " << playerName << ": " << score << std::endl;
+}
+
+void GameIO::printMozaic (Player * player)
+{
+    string playerName = player->get_name();
     Mozaic *mozaic = player->get_mozaic();
+
     OUT << "Mozaic for: " << playerName << std::endl;
     OUT << *mozaic << std::endl;
+}
+
+void GameIO::printGameState ()
+{
+    printFactories ();
+
+    std::vector <Player *> players = game->get_players ();
+
+    for (int i = 0; i < (int) players.size(); i++)
+    {
+        Player * player = players [i];
+
+        printScore (player);
+        printMozaic (player);
+    }
 }
 
 Turn *GameIO::getTurn()
@@ -147,14 +191,13 @@ Turn *GameIO::getTurn()
 
     int factory;
     int row;
-    char colour;
+    unsigned char colour;
 
     IN >> factory;
     IN >> colour;
     IN >> row;
 
-    int count = 0;
-    colour = toupper(colour);
+    colour = std::toupper (colour);
 
     if (colour == 'F')
     {
@@ -233,10 +276,17 @@ Game_manager *GameIO::loadGame()
     // Load players
     addPlayer(numPlayers);
 
-    // Load turns
-    while (moreInput())
+    if (IN.fail() || IN.eof())
     {
-        doTurn();
+        this->game = nullptr;
+    }
+    else
+    {
+        // Load turns
+        while (moreInput())
+        {
+            doTurn();
+        }
     }
     OUT << "Successfully loaded save" << std::endl;
     return this->game;

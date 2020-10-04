@@ -21,6 +21,7 @@ public:
     Player* get_next_player();
     void cycle_players();
     int numPlayers ();
+    std::vector <Player *> & get_players ();
 
     bool factoriesEmpty ();
     int turn(Turn * turn);
@@ -34,19 +35,20 @@ public:
     std::string return_winner_name();
     // Braden also made factories public but I've left it private for now
     //Need factories public to access it from gameIO
-    std::vector<Factory*> factories; 
+    std::vector<Factory*> factories;
 
-    void populate_factories();
 private:
     // Player related-----------------
     int player_turn;
     std::vector<Player*> players;
     void setup_players();
+    void updateMozaics ();
 
     // Factory related-----------------
     void setup_factories();
     bool check_if_empty();
     void leftovers_to_centre(char colour, int factory);
+    void populate_factories();
 
     // Tilebag related-----------------
     TileBag* tilebag;
@@ -55,7 +57,7 @@ private:
     void process_rounds();
     bool process_turn();
     bool first_tile_taken;
-    void finish_update();
+    void endRound();
 
     bool check_if_full(char colour, int row);
 

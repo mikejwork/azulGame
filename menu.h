@@ -12,7 +12,7 @@ public:
     void display_credits();
     void input_logic(int input);
 
-    void loadGame ();
+    bool loadGame ();
     void playGame ();
 private:
     // TODO I reckon we should get rid of this var and just keep the game on the
