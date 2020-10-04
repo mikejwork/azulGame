@@ -1,6 +1,13 @@
 #include "menu.h"
+#include "GameIO.h"
+#include "Game_manager.h"
+
+#include <string>
+#include <iostream>
+#include <fstream>
 
 void usage();
+void testingMode (std::string filename);
 
 int main(int argc, char *argv[])
 {
@@ -16,12 +23,35 @@ int main(int argc, char *argv[])
         std::string flag ( argv[1]);
         std::string filename (argv [2]);
 
-        // TODO implement testing mode
+        if (flag == "-t")
+        {
+            testingMode (filename);
+        }
+        else
+        {
+            usage ();
+        }
     }
     else
     {
         usage ();
     }
+
+    return EXIT_SUCCESS;
+}
+
+void testingMode (std::string filename)
+{
+    std::ifstream file (filename);
+
+    GameIO * io = new GameIO (nullptr, &file, nullptr);
+    Game_manager * game = io->loadGame ();
+    delete io;
+
+    io = new GameIO (game, nullptr, &std::cout);
+    io->printGameState ();
+    delete io;
+    delete game;
 }
 
 void usage ()

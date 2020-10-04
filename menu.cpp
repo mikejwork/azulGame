@@ -104,10 +104,6 @@ void Menu::playGame ()
         // Initiate a round
         io->doRound ();
         std::cout << "\n=== END OF ROUND === \n"; // TODO: Issa change to gameio if needed
-        // after round has completed, re-populate factories
-        // Takes from front of tilebag (also in the scoring system)
-        // the tiles will be moved to the back of the tilebag
-        game_manager->populate_factories();
     }
     io->print_final();
 }

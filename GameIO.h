@@ -32,6 +32,7 @@ class GameIO
         Game_manager * loadGame ();
         void saveGame (std::string filename);
         void print_final();
+        void printGameState ();
 
     private:
         Game_manager * game;
@@ -41,6 +42,11 @@ class GameIO
         std::string doCmd ();
         std::string turnCmd ();
         void saveCmd ();
+
+        void printFactories ();
+        void printScore (Player * player);
+        void printMozaic (Player * player);
+
 
         void printTurn ();
         Turn * getTurn ();

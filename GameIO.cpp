@@ -1,3 +1,4 @@
+\
 // This class handles I/O for the game, and calls methods in Game_manager.
 // The purpose of this class is to easily switch between taing input from stdin
 // and taking input from a save file.
@@ -141,14 +142,46 @@ void GameIO::printTurn()
 
     OUT << "Turn for player: " << playerName << std::endl;
 
-    //Print factories
+    printFactories ();
+    printMozaic (player);
+}
+
+void GameIO::printFactories ()
+{
     OUT << "Factories: " << std::endl;
     game->print_factories(OUT);
+}
 
-    //Print mozaic [sic]
+void GameIO::printScore (Player * player)
+{
+    string playerName = player->get_name();
+    int score = player->get_points ();
+
+    OUT << "Score for player " << playerName << ": " << score << std::endl;
+}
+
+void GameIO::printMozaic (Player * player)
+{
+    string playerName = player->get_name();
     Mozaic *mozaic = player->get_mozaic();
+
     OUT << "Mozaic for: " << playerName << std::endl;
     OUT << *mozaic << std::endl;
+}
+
+void GameIO::printGameState ()
+{
+    printFactories ();
+
+    std::vector <Player *> players = game->get_players ();
+
+    for (int i = 0; i < (int) players.size(); i++)
+    {
+        Player * player = players [i];
+
+        printScore (player);
+        printMozaic (player);
+    }
 }
 
 Turn *GameIO::getTurn()
@@ -157,11 +190,13 @@ Turn *GameIO::getTurn()
 
     int factory;
     int row;
-    char colour;
+    unsigned char colour;
 
     IN >> factory;
     IN >> colour;
     IN >> row;
+
+    colour = std::toupper (colour);
 
     if (colour == 'F')
     {
@@ -171,21 +206,21 @@ Turn *GameIO::getTurn()
 
     //RECENTLY ADDED: THREE IF STATEMENTS AFTER MERGE
     // Checking if the mozaic tile has already been filled in that row
-    if (game->get_next_player()->get_mozaic()->check_line(colour, row))
+    else if (game->get_next_player()->get_mozaic()->check_line(colour, row))
     {
         OUT << "Cannot place tile(s) there! \n";
         turn = nullptr;
     }
 
     // Checking if selected factory actually contains the tile the player is requesting
-    if (game->factories[factory]->get_amount(colour) == 0)
+    else if (game->factories[factory]->get_amount(colour) == 0)
     {
         OUT << "Factory does not contain that tile! \n";
         turn = nullptr;
     }
 
     // Checks if the selected row is already full
-    if (game->get_next_player()->get_mozaic()->isRowFull(row))
+    else if (game->get_next_player()->get_mozaic()->isRowFull(row))
     {
         OUT << "Selected row is already full \n";
         turn = nullptr;
