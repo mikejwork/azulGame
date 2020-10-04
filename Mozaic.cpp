@@ -269,7 +269,7 @@ bool Mozaic::check_place(char colour, int row) //returns true if: mozaic has tha
     int count = 0;
     for (int i = 1; i <= NUM_ROWS; i++)
     {
-        if (check_line(colour, i) && isRowFull(i))
+        if (check_line(colour, i) || isRowFull(i))
         {
             count++;
         }

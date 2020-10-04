@@ -166,7 +166,6 @@ Turn *GameIO::getTurn()
     {
         OUT << "Player cannot place any more tiles, moving to broken" << std::endl;
         turn = new Turn(factory, row, colour);
-        count++;
     }
 
     //RECENTLY ADDED: THREE IF STATEMENTS AFTER MERGE
@@ -175,7 +174,6 @@ Turn *GameIO::getTurn()
     {
             OUT << "Cannot place tile(s) there! \n";
             turn = nullptr;
-            count++;
     }
 
     // Checking if selected factory actually contains the tile the player is requesting
@@ -183,7 +181,6 @@ Turn *GameIO::getTurn()
     {
         OUT << "Factory does not contain that tile! \n";
         turn = nullptr;
-        count++;
     }
 
     // Checks if the selected row is already full
@@ -191,7 +188,6 @@ Turn *GameIO::getTurn()
     {
         OUT << "Row is already full \n";
         turn = nullptr;
-        count++;
     }
     else
     {
