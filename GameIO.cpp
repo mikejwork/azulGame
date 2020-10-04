@@ -67,7 +67,7 @@ void GameIO::doRound()
     {
         doTurn();
     }
-    print_final(); //Prints the final scores / end of game 
+    print_final(); //Prints the final scores / end of game
 }
 
 std::string GameIO::doCmd()
@@ -79,7 +79,7 @@ std::string GameIO::doCmd()
 
     if (cmd == "turn")
     {
-        turnCmd();
+        cmd = turnCmd();
     }
     else if (cmd == "save")
     {
@@ -95,10 +95,18 @@ std::string GameIO::doCmd()
     return cmd;
 }
 
-void GameIO::turnCmd()
+std::string GameIO::turnCmd()
 {
+    std::string returnValue = "";
+
     Turn *turn = getTurn();
-    game->turn(turn);
+    if (turn != nullptr)
+    {
+        game->turn(turn);
+        returnValue = "turn";
+    }
+
+    return returnValue;
 }
 
 void GameIO::saveCmd()
@@ -134,18 +142,6 @@ void GameIO::printTurn()
 }
 
 Turn *GameIO::getTurn()
-{
-    Turn *turn = nullptr;
-
-    while (turn == nullptr)
-    {
-        turn = inputTurn();
-    }
-
-    return turn;
-}
-
-Turn *GameIO::inputTurn()
 {
     Turn *turn = nullptr;
 

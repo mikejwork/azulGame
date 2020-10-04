@@ -38,12 +38,11 @@ class GameIO
         std::ostream * out;
 
         std::string doCmd ();
-        void turnCmd ();
+        std::string turnCmd ();
         void saveCmd ();
 
         void printTurn ();
         Turn * getTurn ();
-        Turn * inputTurn ();
 
         bool moreInput ();
 
