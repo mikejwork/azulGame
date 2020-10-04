@@ -48,10 +48,18 @@ void testingMode (std::string filename)
     Game_manager * game = io->loadGame ();
     delete io;
 
-    io = new GameIO (game, nullptr, &std::cout);
-    io->printGameState ();
-    delete io;
-    delete game;
+    if (game == nullptr)
+    {
+        std::cout << "ERROR - " << filename << " is not a valid save file."
+            << std::endl;
+    }
+    else
+    {
+        io = new GameIO (game, nullptr, &std::cout);
+        io->printGameState ();
+        delete io;
+        delete game;
+    }
 }
 
 void usage ()

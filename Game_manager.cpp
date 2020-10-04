@@ -274,11 +274,11 @@ bool Game_manager::validRow (int row)
 {
     bool valid = true;
 
-    if (factory < 0)
+    if (row < 0)
     {
         valid = false;
     }
-    else if (factory >= NUM_ROWS)
+    else if (row >= NUM_ROWS)
     {
         valid = false;
     }
