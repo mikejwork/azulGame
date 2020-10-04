@@ -36,6 +36,7 @@ public:
     //Need factories public to access it from gameIO
     std::vector<Factory*> factories; 
 
+    void populate_factories();
 private:
     // Player related-----------------
     int player_turn;

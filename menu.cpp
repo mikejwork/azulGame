@@ -88,8 +88,15 @@ void Menu::playGame ()
     // TODO rounds, instead of until 5 total rounds.
     for (int i = 0; i < NUM_ROUNDS; i++)
     {
+        // Initiate a round
         io->doRound ();
+        std::cout << "\n=== END OF ROUND === \n"; // TODO: Issa change to gameio if needed
+        // after round has completed, re-populate factories
+        // Takes from front of tilebag (also in the scoring system)
+        // the tiles will be moved to the back of the tilebag
+        game_manager->populate_factories();
     }
+    io->print_final();
 }
 
 void Menu::display_credits()

@@ -31,6 +31,7 @@ class GameIO
 
         Game_manager * loadGame ();
         void saveGame (std::string filename);
+        void print_final();
 
     private:
         Game_manager * game;
@@ -51,7 +52,6 @@ class GameIO
         bool checkColour(char colour, int row);
 
 
-        void print_final();
 
         static std::ostream * devNull;
 };
