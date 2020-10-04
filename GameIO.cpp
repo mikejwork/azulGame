@@ -204,6 +204,18 @@ Turn *GameIO::getTurn()
         turn = nullptr;
     }
 
+    else if (!game->validFactory (factory))
+    {
+        OUT << "Factory out of bounds." << std::endl;
+        turn = nullptr;
+    }
+
+    else if (!game->validRow (row))
+    {
+        OUT << "Row out of bounds." << std::endl;
+        turn = nullptr;
+    }
+
     //RECENTLY ADDED: THREE IF STATEMENTS AFTER MERGE
     // Checking if the mozaic tile has already been filled in that row
     else if (game->get_next_player()->get_mozaic()->check_line(colour, row))

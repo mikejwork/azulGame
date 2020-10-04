@@ -5,6 +5,7 @@
 #include "Factory.h"
 #include "TileBag.h"
 #include "Turn.h"
+#include "Mozaic.h"
 
 #include <vector>
 #include <iostream>
@@ -36,6 +37,10 @@ public:
     // Braden also made factories public but I've left it private for now
     //Need factories public to access it from gameIO
     std::vector<Factory*> factories;
+
+    //Error checking
+    bool validFactory (int factory);
+    bool validRow (int row);
 
 private:
     // Player related-----------------

@@ -246,3 +246,35 @@ std::vector <Player *> & Game_manager::get_players ()
 {
     return this->players;
 }
+
+bool Game_manager::validFactory (int factory)
+{
+    bool valid = true;
+
+    if (factory < 0)
+    {
+        valid = false;
+    }
+    else if (factory >= NUM_FACTORIES)
+    {
+        valid = false;
+    }
+
+    return valid;
+}
+
+bool Game_manager::validRow (int row)
+{
+    bool valid = true;
+
+    if (factory < 0)
+    {
+        valid = false;
+    }
+    else if (factory >= NUM_ROWS)
+    {
+        valid = false;
+    }
+
+    return valid;
+}
