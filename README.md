@@ -1,9 +1,33 @@
-**Advanced Programming Techniques - Semester 2 2020.**
-*Azul Game Assignment.*
+<h1 align="center">
+    <br>
+    <img src="https://i.imgur.com/DMTMfRJ.png" alt="Azul" width="450">
+    <br>
+</h1>
 
-![forthebadge](https://forthebadge.com/images/badges/0-percent-optimized.svg) ![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
+<h4 align="center">C++ 2-Player text-based board game, Azul.</h4>
 
-**brief explanation**
+<p align="center">
+  <a href="#learning-outcomes">Learning Outcomes</a> •
+  <a href="#personal-notes">Personal notes</a>
+</p>
+<br>
 
-> assignment started with a group component (which is what this repository holds) and another part was an individual component which i will have in a separate repository. The aim of the assignment was to re-create the board game 'Azul' with C++ using console output to display the board / tiles that players could move.
+<p align="center">
+	Advanced Programming Techniques  
+    Semester 2 2020  
+    Programming Assignment 2
+</p>
 
+## Learning Outcomes
+- Linked Lists, Arrays, Vectors, Binary Search Trees
+- Pointers & Dynamic Memory Management
+- File Processing
+- Polymorphism and Encapsulation
+- Program state management
+- Exception Handling
+- Unit testing
+- Usage of C++14 & the C++ STL
+- Develop in a team using collaboration tools (*GitHub, MS Teams*)
+
+## Personal Notes
+Was probably one of the most difficult projects i had worked on in a while at that time, Very happy with end result, achieved a DI (23/30). 
