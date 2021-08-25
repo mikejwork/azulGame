@@ -13,8 +13,8 @@
 <br>
 
 <p align="center">
-    Advanced Programming Techniques | 
-    Semester 2 2020 | 
+    Advanced Programming Techniques<br>
+    Semester 2 2020<br>
     Programming Assignment 2  
 </p>
 
