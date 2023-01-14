@@ -111,22 +111,7 @@ void Menu::playGame ()
 
 void Menu::display_credits()
 {
-    std::cout << std::endl << "---------------------------------- \n"
-
-    << "Name: Braden Smith \n"
-    << "Student ID: s3787174 \n"
-    << "Email: s3787174@student.rmit.edu.au \n \n"
-
-    << "Name: Michael Jurie \n"
-    << "Student ID: s3785631 \n"
-    << "Email: s3785631@student.rmit.edu.au \n \n"
-
-    << "Name: Issa Chanzi \n"
-    << "Student ID: s3783615 \n"
-    << "Email: s3783615@student.rmit.edu.au \n"
-
-    << "---------------------------------- \n \n";
-
+    std::cout << "Credits" << std::endl
     // send the user back to the menu
     display_menu();
 }
